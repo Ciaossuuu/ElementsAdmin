@@ -2,14 +2,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:easy_dialog/easy_dialog.dart';
-import '../Shared/navbutton.dart';
-import '../Shared/customexpansiontile.dart' as custom;
-import '../Menu/reports.dart';
-import '../Menu/users.dart';
-import '../Menu/lessons.dart';
-
-
+import 'package:elementsadmin/Shared/customexpansiontile.dart' as custom;
+import 'package:elementsadmin/Shared/navbutton.dart';
+import 'package:elementsadmin/Shared/navbar.dart';
+import 'package:elementsadmin/Menu/reports.dart';
+import 'package:elementsadmin/Menu/users.dart';
 
 class Lessons extends StatefulWidget {
   @override
@@ -43,65 +40,7 @@ class _LessonsState extends State<Lessons> {
                   color: Colors.white,
                   child: Column(
                     children: <Widget>[
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            width: width * .05,
-                            height: height * .10,
-                            child: Center(
-                              child: Image(
-                                image: AssetImage('assets/logos.png'),
-                              ),
-                            ),
-                          ),
-                          Text(
-                            'Elements++',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold
-                            ),
-                          ),
-                        ],
-                      ),
-                      horizontalLine(),
-                      Container(
-                        height: height * .15,
-                        child: Padding(
-                          padding:  EdgeInsets.all(15),
-                          child: Container(
-                            child: Row(
-                              children: <Widget>[
-                                Image(image: AssetImage('assets/admin.png')),
-                                Container(
-                                  height: queryData.size.height / 5,
-                                  width: queryData.size.width / 8.5,
-                                    // width: (width * .2) * .8,
-                                    // height: height * .10,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                                        color: Colors.white),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(15),
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(
-                                            'David M. Grey',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold, fontSize: 10),
-                                          ),
-                                          Text('Project Manager'),
-                                        ],
-                                      ),
-                                    )),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+                      NavBarDrawer(),
                       horizontalLine(),
                       SizedBox(height: 10),
                       Padding(
@@ -130,39 +69,64 @@ class _LessonsState extends State<Lessons> {
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(15)),
                     ),
-                    child: custom.ExpansionTile(    
-                      headerBackgroundColor: Colors.black,
-          iconColor: Colors.white,       
-    title: Container(
-        child: Text(
-            "getCategory(i)",
-            style: TextStyle(
-            color: Colors.white,
-            ),
-        ),
-        color: Colors.black
-    ),
-    
-    children: <Widget>[
-        new Container(
-            height: 60.0,
-            margin: const EdgeInsets.only(top:10.0, left: 10.0, right:10.0, bottom: 10.0),
-            decoration: BoxDecoration(                    
-            color: Colors.blue,
-            borderRadius: new BorderRadius.all(  Radius.circular(5.0) ),
-            ),
-        ),
-        new Container(
-            height: 60.0,
-            margin: const EdgeInsets.only(top:10.0, left: 10.0, right:10.0, bottom: 0.0),
-            decoration: BoxDecoration(                    
-            color: Colors.green,
-            borderRadius: new BorderRadius.all(  Radius.circular(5.0) ),
-            ),
-        )
-    ],
-    backgroundColor: Colors.white,
-)
+                    child: Padding(
+                      padding: EdgeInsets.all(15),
+                      child: Column(
+                      children: <Widget>[
+                        Container(
+                          color: Colors.red[300],
+                          width: queryData.size.width/1.25,
+                          height: queryData.size.height/7,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "HAKDOG"
+                            ),
+                          ),
+                        ),
+                        custom.ExpansionTile(    
+                          headerBackgroundColor: Colors.red[300],
+                          iconColor: Colors.black,       
+                          title: Container(
+                            color: Colors.red[300],
+                              child: Text(
+                                  "Lesson 1",
+                                  style: TextStyle(
+                                  color: Colors.black,
+                                  ),
+                              ),
+                          ),
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    height: 60.0,
+                                    //margin: const EdgeInsets.only(top:10.0, left: 10.0, right:10.0, bottom: 10.0),
+                                    decoration: BoxDecoration(                    
+                                      color: Colors.white,
+                                      borderRadius: new BorderRadius.all(  Radius.circular(5.0) ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Container(
+                                    height: 60.0,
+                                    //margin: const EdgeInsets.only(top:10.0, left: 10.0, right:10.0, bottom: 0.0),
+                                    decoration: BoxDecoration(                    
+                                      color: Colors.white,
+                                      borderRadius: new BorderRadius.all(  Radius.circular(5.0) ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                          backgroundColor: Colors.grey[100],
+                        ),
+                      ],
+                    ),
+                    )
                   )
                 ),
               )
