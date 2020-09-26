@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elementsadmin/Models/model.dart';
 import 'package:elementsadmin/Services/services.dart';
 import 'package:elementsadmin/Strings/textStyles.dart';
+import 'package:custom_switch/custom_switch.dart';
 import 'package:flutter/material.dart';
 
 class LessonsModule extends StatefulWidget {
@@ -423,164 +424,193 @@ class _LessonsModuleState extends State<LessonsModule> {
   //Update Dialog
   _updateDialog(BuildContext context, DocumentSnapshot doc) {
     LessonModel lesson = LessonModel.getData(doc: doc);
-
+    bool isEnabled = false;
     showDialog<String>(
       context: context,
       child: AlertDialog(
         contentPadding: const EdgeInsets.all(16.0),
         title: Text('Update Lesson'),
-        content: Container(
-          width: size.width * .6,
-          height: size.height * .7,
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Row(
-                  children: [
-                    Container(
-                      width: size.width * .09,
-                      child: TextFormField(
-                        initialValue: lesson.sequence,
-                        decoration: InputDecoration(labelText: 'Lesson No.'),
-                        onChanged: (String sequence) {
-                          getSequence(sequence);
-                        },
-                      ),
+        content: StatefulBuilder(
+          builder: (context, setState) {
+            return Container(
+              width: size.width * .6,
+              height: size.height * .7,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    CustomSwitch(
+                      activeColor: Colors.greenAccent,
+                      value: isEnabled,
+                      onChanged: (value) {
+                        setState(() {
+                          isEnabled = value;
+                        });
+                      },
                     ),
-                    SizedBox(width: size.width * .01),
-                    Container(
-                      width: size.width * .5,
-                      child: TextFormField(
-                        initialValue: lesson.title,
-                        decoration: InputDecoration(labelText: 'Title'),
-                        onChanged: (String title) {
-                          getTitle(title);
-                        },
-                      ),
+                    Row(
+                      children: [
+                        Container(
+                          width: size.width * .09,
+                          child: TextFormField(
+                            enabled: isEnabled,
+                            initialValue: lesson.sequence,
+                            decoration:
+                                InputDecoration(labelText: 'Lesson No.'),
+                            onChanged: (String sequence) {
+                              getSequence(sequence);
+                            },
+                          ),
+                        ),
+                        SizedBox(width: size.width * .01),
+                        Container(
+                          width: size.width * .5,
+                          child: TextFormField(
+                            enabled: isEnabled,
+                            initialValue: lesson.title,
+                            decoration: InputDecoration(labelText: 'Title'),
+                            onChanged: (String title) {
+                              getTitle(title);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: size.width * .09,
+                          child: TextFormField(
+                            enabled: isEnabled,
+                            initialValue: lesson.video_time,
+                            maxLines: 3,
+                            decoration:
+                                InputDecoration(labelText: 'Video Time'),
+                            onChanged: (String video_time) {
+                              getVideoTime(video_time);
+                            },
+                          ),
+                        ),
+                        SizedBox(width: size.width * .01),
+                        Container(
+                          width: size.width * .5,
+                          child: TextFormField(
+                            enabled: isEnabled,
+                            initialValue: lesson.video_url,
+                            maxLines: 3,
+                            decoration: InputDecoration(labelText: 'Video URL'),
+                            onChanged: (String video_url) {
+                              getVideoReference(video_url);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    TextFormField(
+                      enabled: isEnabled,
+                      initialValue: lesson.header,
+                      decoration: InputDecoration(labelText: 'Header'),
+                      onChanged: (String header) {
+                        getHeader(header);
+                      },
+                    ),
+                    TextFormField(
+                      enabled: isEnabled,
+                      initialValue: lesson.description,
+                      minLines: 3,
+                      maxLines: 5,
+                      decoration: InputDecoration(labelText: 'Description'),
+                      onChanged: (String description) {
+                        getDesc(description);
+                      },
+                    ),
+                    TextFormField(
+                      enabled: isEnabled,
+                      initialValue: lesson.banner_url,
+                      minLines: 2,
+                      maxLines: 3,
+                      decoration: InputDecoration(labelText: 'Banner URL'),
+                      onChanged: (String banner_url) {
+                        getBanner(banner_url);
+                      },
+                    ),
+                    TextFormField(
+                      enabled: isEnabled,
+                      initialValue: lesson.question,
+                      decoration: InputDecoration(labelText: 'Question'),
+                      onChanged: (String question) {
+                        getDesc(question);
+                      },
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: size.width * .1,
+                          child: TextFormField(
+                            enabled: isEnabled,
+                            initialValue: lesson.choices[0],
+                            decoration: InputDecoration(labelText: 'Choice 1'),
+                            validator: (value) {
+                              choices.add(value);
+                              return;
+                            },
+                          ),
+                        ),
+                        Container(
+                          width: size.width * .1,
+                          child: TextFormField(
+                            enabled: isEnabled,
+                            initialValue: lesson.choices[1],
+                            decoration: InputDecoration(labelText: 'Choice 2'),
+                            validator: (value) {
+                              choices.add(value);
+                              return;
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: size.width * .1,
+                          child: TextFormField(
+                            enabled: isEnabled,
+                            initialValue: lesson.choices[2],
+                            decoration: InputDecoration(labelText: 'Choice 3'),
+                            validator: (value) {
+                              choices.add(value);
+                              return;
+                            },
+                          ),
+                        ),
+                        Container(
+                          width: size.width * .1,
+                          child: TextFormField(
+                            enabled: isEnabled,
+                            initialValue: lesson.choices[3],
+                            decoration: InputDecoration(labelText: 'Choice 4'),
+                            validator: (value) {
+                              choices.add(value);
+                              return;
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                    TextFormField(
+                      enabled: isEnabled,
+                      initialValue: lesson.correctAnswer,
+                      decoration: InputDecoration(labelText: 'Correct Answer'),
+                      onChanged: (String correctAnswer) {
+                        getBanner(correctAnswer);
+                      },
                     ),
                   ],
                 ),
-                Row(
-                  children: [
-                    Container(
-                      width: size.width * .09,
-                      child: TextFormField(
-                        initialValue: lesson.video_time,
-                        maxLines: 3,
-                        decoration: InputDecoration(labelText: 'Video Time'),
-                        onChanged: (String video_time) {
-                          getVideoTime(video_time);
-                        },
-                      ),
-                    ),
-                    SizedBox(width: size.width * .01),
-                    Container(
-                      width: size.width * .5,
-                      child: TextFormField(
-                        initialValue: lesson.video_url,
-                        maxLines: 3,
-                        decoration: InputDecoration(labelText: 'Video URL'),
-                        onChanged: (String video_url) {
-                          getVideoReference(video_url);
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                TextFormField(
-                  initialValue: lesson.header,
-                  decoration: InputDecoration(labelText: 'Header'),
-                  onChanged: (String header) {
-                    getHeader(header);
-                  },
-                ),
-                TextFormField(
-                  initialValue: lesson.description,
-                  minLines: 3,
-                  maxLines: 5,
-                  decoration: InputDecoration(labelText: 'Description'),
-                  onChanged: (String description) {
-                    getDesc(description);
-                  },
-                ),
-                TextFormField(
-                  initialValue: lesson.banner_url,
-                  minLines: 2,
-                  maxLines: 3,
-                  decoration: InputDecoration(labelText: 'Banner URL'),
-                  onChanged: (String banner_url) {
-                    getBanner(banner_url);
-                  },
-                ),
-                TextFormField(
-                  initialValue: lesson.question,
-                  decoration: InputDecoration(labelText: 'Question'),
-                  onChanged: (String question) {
-                    getDesc(question);
-                  },
-                ),
-                Row(
-                  children: [
-                    Container(
-                      width: size.width * .1,
-                      child: TextFormField(
-                        initialValue: lesson.choices[0],
-                        decoration: InputDecoration(labelText: 'Choice 1'),
-                        validator: (value) {
-                          choices.add(value);
-                          return;
-                        },
-                      ),
-                    ),
-                    Container(
-                      width: size.width * .1,
-                      child: TextFormField(
-                        initialValue: lesson.choices[1],
-                        decoration: InputDecoration(labelText: 'Choice 2'),
-                        validator: (value) {
-                          choices.add(value);
-                          return;
-                        },
-                      ),
-                    )
-                  ],
-                ),
-                Row(
-                  children: [
-                    Container(
-                      width: size.width * .1,
-                      child: TextFormField(
-                        initialValue: lesson.choices[2],
-                        decoration: InputDecoration(labelText: 'Choice 3'),
-                        validator: (value) {
-                          choices.add(value);
-                          return;
-                        },
-                      ),
-                    ),
-                    Container(
-                      width: size.width * .1,
-                      child: TextFormField(
-                        initialValue: lesson.choices[3],
-                        decoration: InputDecoration(labelText: 'Choice 4'),
-                        validator: (value) {
-                          choices.add(value);
-                          return;
-                        },
-                      ),
-                    )
-                  ],
-                ),
-                TextFormField(
-                  initialValue: lesson.correctAnswer,
-                  decoration: InputDecoration(labelText: 'Correct Answer'),
-                  onChanged: (String correctAnswer) {
-                    getBanner(correctAnswer);
-                  },
-                ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         ),
         actions: <Widget>[
           new FlatButton(
