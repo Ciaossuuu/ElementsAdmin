@@ -19,7 +19,8 @@ class _LessonsModuleState extends State<LessonsModule> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   List<String> choices = [];
-  String sequence,
+  String ref,
+      sequence,
       title,
       video_url,
       video_time,
@@ -330,7 +331,7 @@ class _LessonsModuleState extends State<LessonsModule> {
                     TextFormField(
                       decoration: InputDecoration(labelText: 'Question'),
                       onChanged: (String question) {
-                        getDesc(question);
+                        getQuestion(question);
                       },
                     ),
                     Row(
@@ -384,7 +385,7 @@ class _LessonsModuleState extends State<LessonsModule> {
                     TextFormField(
                       decoration: InputDecoration(labelText: 'Correct Answer'),
                       onChanged: (String correctAnswer) {
-                        getBanner(correctAnswer);
+                        getCorrectAns(correctAnswer);
                       },
                     ),
                   ],
@@ -403,6 +404,7 @@ class _LessonsModuleState extends State<LessonsModule> {
                 onPressed: () {
                   _formKey.currentState.validate();
                   DatabaseService().addLesson(
+                      ref,
                       sequence,
                       title,
                       video_url,
@@ -427,27 +429,31 @@ class _LessonsModuleState extends State<LessonsModule> {
     bool isEnabled = false;
     showDialog<String>(
       context: context,
-      child: AlertDialog(
-        contentPadding: const EdgeInsets.all(16.0),
-        title: Text('Update Lesson'),
-        content: StatefulBuilder(
-          builder: (context, setState) {
-            return Container(
+      child: StatefulBuilder(builder: (context, setState) {
+        return AlertDialog(
+            contentPadding: const EdgeInsets.all(16.0),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Update Lessons'),
+                CustomSwitch(
+                  activeColor: Colors.greenAccent,
+                  value: isEnabled,
+                  onChanged: (value) {
+                    setState(() {
+                      isEnabled = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+            content: Container(
               width: size.width * .6,
               height: size.height * .7,
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
-                    CustomSwitch(
-                      activeColor: Colors.greenAccent,
-                      value: isEnabled,
-                      onChanged: (value) {
-                        setState(() {
-                          isEnabled = value;
-                        });
-                      },
-                    ),
                     Row(
                       children: [
                         Container(
@@ -539,7 +545,7 @@ class _LessonsModuleState extends State<LessonsModule> {
                       initialValue: lesson.question,
                       decoration: InputDecoration(labelText: 'Question'),
                       onChanged: (String question) {
-                        getDesc(question);
+                        getQuestion(question);
                       },
                     ),
                     Row(
@@ -603,30 +609,28 @@ class _LessonsModuleState extends State<LessonsModule> {
                       initialValue: lesson.correctAnswer,
                       decoration: InputDecoration(labelText: 'Correct Answer'),
                       onChanged: (String correctAnswer) {
-                        getBanner(correctAnswer);
+                        getCorrectAns(correctAnswer);
                       },
                     ),
                   ],
                 ),
               ),
-            );
-          },
-        ),
-        actions: <Widget>[
-          new FlatButton(
-              child: const Text('CANCEL'),
-              onPressed: () {
-                Navigator.pop(context);
-              }),
-          new FlatButton(
-              child: const Text('UPDATE'),
-              onPressed: () {
-                DatabaseService().updateLesson(doc, sequence, title, video_url,
-                    video_time, header, description);
-                Navigator.pop(context);
-              }),
-        ],
-      ),
+            ),
+            actions: <Widget>[
+              new FlatButton(
+                  child: const Text('CANCEL'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }),
+              new FlatButton(
+                  child: const Text('UPDATE'),
+                  onPressed: () {
+                    DatabaseService().updateLesson(doc, sequence, title,
+                        video_url, video_time, header, description);
+                    Navigator.pop(context);
+                  })
+            ]);
+      }),
     );
   }
 

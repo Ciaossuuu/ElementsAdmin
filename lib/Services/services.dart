@@ -4,6 +4,7 @@ class DatabaseService {
   CollectionReference lesson = FirebaseFirestore.instance.collection('lessons');
   //add
   Future<void> addLesson(
+    String ref,
     String sequence,
     String title,
     String video_url,
@@ -18,6 +19,7 @@ class DatabaseService {
     return lesson
         .doc(sequence)
         .set({
+          'ref': sequence,
           'sequence': sequence,
           'title': title,
           'video_url': video_url,
