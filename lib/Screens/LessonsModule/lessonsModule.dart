@@ -133,7 +133,7 @@ class _LessonsModuleState extends State<LessonsModule> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            width: size.width * .22,
+            width: size.width * .2,
             height: size.height,
             decoration: BoxDecoration(color: Colors.white, boxShadow: [
               BoxShadow(
@@ -144,28 +144,25 @@ class _LessonsModuleState extends State<LessonsModule> {
               )
             ]),
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.only(top: 50),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   MaterialButton(
-                    color: Colors.deepPurple[400],
+                    color: Colors.deepPurple[300],
                     highlightColor: Colors.purple,
                     hoverColor: Colors.deepPurple[300],
                     height: size.height * .075,
-                    minWidth: size.width * 0.1,
+                    minWidth: size.width * 0.2,
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text('Lessons Module',
                           style: CustomTextStyles.customText(
                               isBold: true, size: FontSizes.large)),
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
                     onPressed: () => Navigator.pushNamed(context, '/lessons'),
                   ),
-                  SizedBox(height: size.height * .01),
+                  SizedBox(height: size.height * .02),
                   MaterialButton(
                     height: size.height * .075,
                     minWidth: size.width * 0.2,
@@ -177,12 +174,9 @@ class _LessonsModuleState extends State<LessonsModule> {
                           style: CustomTextStyles.customText(
                               isBold: true, size: FontSizes.large)),
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
                     onPressed: () => Navigator.pushNamed(context, '/challenge'),
                   ),
-                  SizedBox(height: size.height * .01),
+                  SizedBox(height: size.height * .02),
                   MaterialButton(
                     height: size.height * .075,
                     minWidth: size.width * 0.2,
@@ -193,9 +187,6 @@ class _LessonsModuleState extends State<LessonsModule> {
                       child: Text('Users',
                           style: CustomTextStyles.customText(
                               isBold: true, size: FontSizes.large)),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
                     ),
                     onPressed: () => Navigator.pushNamed(context, '/users'),
                   ),
@@ -661,21 +652,17 @@ class _LessonsModuleState extends State<LessonsModule> {
   //Lesson Cards
   Widget _lessonCard({DocumentSnapshot doc}) {
     LessonModel lesson = LessonModel.getData(doc: doc);
-    Future getData() async {
-      var database = FirebaseFirestore.instance;
-      QuerySnapshot snapshot = await database.collection('lessons').get();
-      return snapshot.docs;
-    }
-
-    return FutureBuilder(
-      future: getData(),
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance
+          .collection('lessons')
+          .orderBy('sequence')
+          .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
             child: SizedBox(
               height: 210.0,
               width: 200.0,
-              child: CircularProgressIndicator(),
             ),
           );
         } else {

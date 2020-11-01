@@ -86,7 +86,7 @@ class _UsersState extends State<Users> {
               )
             ]),
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.only(top: 50.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -101,16 +101,12 @@ class _UsersState extends State<Users> {
                           style: CustomTextStyles.customText(
                               isBold: true, size: FontSizes.large)),
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
                     onPressed: () => Navigator.pushNamed(context, '/lessons'),
                   ),
-                  SizedBox(height: size.height * .01),
+                  SizedBox(height: size.height * .02),
                   MaterialButton(
                     height: size.height * .075,
                     minWidth: size.width * 0.2,
-                    color: Colors.deepPurple[400],
                     highlightColor: Colors.purple,
                     hoverColor: Colors.deepPurple[300],
                     child: Align(
@@ -119,15 +115,13 @@ class _UsersState extends State<Users> {
                           style: CustomTextStyles.customText(
                               isBold: true, size: FontSizes.large)),
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
                     onPressed: () => Navigator.pushNamed(context, '/challenge'),
                   ),
-                  SizedBox(height: size.height * .01),
+                  SizedBox(height: size.height * .02),
                   MaterialButton(
                     height: size.height * .075,
                     minWidth: size.width * 0.2,
+                    color: Colors.deepPurple[400],
                     highlightColor: Colors.purple,
                     hoverColor: Colors.deepPurple[300],
                     child: Align(
@@ -135,9 +129,6 @@ class _UsersState extends State<Users> {
                       child: Text('Users',
                           style: CustomTextStyles.customText(
                               isBold: true, size: FontSizes.large)),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
                     ),
                     onPressed: () => Navigator.pushNamed(context, '/users'),
                   ),

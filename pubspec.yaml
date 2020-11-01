@@ -28,6 +28,7 @@ dependencies:
   fluro: ^1.6.3
   firebase: ^7.3.0
   cloud_firestore: "^0.14.0+2"
+  firebase_auth: ^0.18.1+2
 
 dev_dependencies:
   flutter_test:

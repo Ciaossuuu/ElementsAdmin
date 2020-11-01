@@ -27,8 +27,11 @@ class FluroRouter {
   static void setupRouter() {
     router.define(Routes.def,
         handler: _signInHandler, transitionType: TransitionType.fadeIn);
-    router.define(Routes.lessons, handler: _lessonsModule);
-    router.define(Routes.challenge, handler: _challengeModule);
-    router.define(Routes.users, handler: _users);
+    router.define(Routes.lessons,
+        handler: _lessonsModule, transitionType: TransitionType.fadeIn);
+    router.define(Routes.challenge,
+        handler: _challengeModule, transitionType: TransitionType.fadeIn);
+    router.define(Routes.users,
+        handler: _users, transitionType: TransitionType.fadeIn);
   }
 }
