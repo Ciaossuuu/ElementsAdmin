@@ -1,7 +1,7 @@
 import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:elementsadmin/Models/model.dart';
+
 import 'package:elementsadmin/Services/services.dart';
 import 'package:elementsadmin/Strings/textStyles.dart';
 import 'package:flutter/material.dart';
@@ -178,7 +178,7 @@ class _UsersState extends State<Users> {
 
   //Lesson Cards
   Widget _lessonCard({DocumentSnapshot doc}) {
-    LessonModel lesson = LessonModel.getData(doc: doc);
+    //LessonModel lesson = LessonModel.getData(doc: doc);
     Future getData() async {
       var database = FirebaseFirestore.instance;
       QuerySnapshot snapshot = await database.collection('lessons').get();
