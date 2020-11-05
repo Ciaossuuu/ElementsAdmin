@@ -1,3 +1,4 @@
+import 'package:elementsadmin/Screens/CoursesModule/courseBuilder.dart';
 import 'package:elementsadmin/Screens/CoursesModule/coursesModule.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,9 @@ class FluroRouter {
   static Handler _users = Handler(
       handlerFunc: (BuildContext context, Map<String, dynamic> params) =>
           Users());
+  static Handler _courseBuilder = Handler(
+      handlerFunc: (BuildContext context, Map<String, dynamic> params) =>
+          CourseBuilder());
 
 //-----------------------Routenames----------------------------------------//
   static void setupRouter() {
@@ -39,5 +43,7 @@ class FluroRouter {
         handler: _coursesModule, transitionType: TransitionType.fadeIn);
     router.define(Routes.users,
         handler: _users, transitionType: TransitionType.fadeIn);
+    router.define(Routes.courseBuilder,
+        handler: _courseBuilder, transitionType: TransitionType.cupertino);
   }
 }

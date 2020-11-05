@@ -25,13 +25,13 @@ class NavigationBar extends StatelessWidget with PreferredSizeWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildButton(
-                  text: 'Lessons Module',
-                  size: size,
-                  onpressed: () {
-                    Navigator.pushNamed(context, Routes.lessons);
-                  }),
-              SizedBox(height: size.height * .02),
+              // _buildButton(
+              //     text: 'Lessons Module',
+              //     size: size,
+              //     onpressed: () {
+              //       Navigator.pushNamed(context, Routes.lessons);
+              //     }),
+              //      SizedBox(height: size.height * .02),
               _buildButton(
                   text: 'Challenge Module',
                   size: size,

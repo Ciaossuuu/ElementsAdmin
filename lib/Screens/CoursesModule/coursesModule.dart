@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:elementsadmin/Models/courseModel.dart';
+import 'package:elementsadmin/Screens/CoursesModule/courseBuilder.dart';
 import 'package:elementsadmin/Screens/elementsAppBar.dart';
 import 'package:elementsadmin/Screens/navigationBar.dart';
+import 'package:elementsadmin/Strings/routes.dart';
 
 import 'package:flutter/material.dart';
 
@@ -17,7 +20,9 @@ class _CourseModuleState extends State<CoursesModule> {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, Routes.courseBuilder);
+        },
         child: Icon(Icons.add),
       ),
       appBar: PreferredSize(
@@ -29,8 +34,8 @@ class _CourseModuleState extends State<CoursesModule> {
           Center(
             child: Container(
               width: size.width * .8,
-              color: Colors.blueAccent,
               height: size.height,
+              color: Colors.grey[300],
               child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('courses')
@@ -60,14 +65,52 @@ class _CourseModuleState extends State<CoursesModule> {
   }
 
   _courseBuilder({DocumentSnapshot doc}) {
-    //  print(doc.data());
+    CourseModel course = CourseModel.getData(doc: doc);
     return Card(
-      child: Container(
-        width: 250,
-        height: 250,
-        color: Colors.red,
-        child: Text('data'),
+      child: InkWell(
+        splashColor: Colors.blue,
+        onTap: () {},
+        child: Container(
+          width: 250,
+          child: Padding(
+            padding: EdgeInsets.all(10),
+            child: Column(children: [
+              Text(course.title),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Image.network(course.courseImageUrl),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Text(
+                  course.description,
+                  textAlign: TextAlign.center,
+                ),
+              )
+            ]),
+          ),
+        ),
       ),
+    );
+  }
+
+  showAlertDialog(BuildContext context) {
+    // set up the button
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      contentPadding: EdgeInsets.all(0),
+      // title: Text("My title"),
+      content: CourseBuilder(),
+      actions: [],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }

@@ -4,4 +4,5 @@ class Routes {
   static String challenge = '/challenge';
   static String users = '/users';
   static String courses = '/courses';
+  static String courseBuilder = '/courseBuilder';
 }

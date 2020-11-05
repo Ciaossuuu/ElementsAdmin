@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:elementsadmin/Strings/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:elementsadmin/Screens/LessonsModule/lessonsModule.dart';
 
@@ -132,7 +133,8 @@ class _LoginPageState extends State<LoginPage> {
                               fontWeight: FontWeight.bold, letterSpacing: 7),
                         ),
                         onPressed: () {
-                          Navigator.pushReplacementNamed(context, '/lessons');
+                          Navigator.pushReplacementNamed(
+                              context, Routes.courses);
                         },
                       ),
                     ),
