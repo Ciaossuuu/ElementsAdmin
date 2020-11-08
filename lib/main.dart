@@ -1,3 +1,4 @@
+import 'package:elementsadmin/Screens/Dashboard/dashboard.dart';
 import 'package:elementsadmin/Screens/LessonsModule/lessonsModule.dart';
 import 'package:elementsadmin/Screens/Authentication/login.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,6 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           fontFamily: 'Roboto',
         ),
-        home: LoginPage());
+        home: Dashboard());
   }
 }

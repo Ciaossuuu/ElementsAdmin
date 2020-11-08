@@ -1,5 +1,6 @@
 import 'package:elementsadmin/Screens/CoursesModule/courseBuilder.dart';
 import 'package:elementsadmin/Screens/CoursesModule/coursesModule.dart';
+import 'package:elementsadmin/Screens/Dashboard/dashboard.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,9 @@ class FluroRouter {
   static Handler _signInHandler = Handler(
       handlerFunc: (BuildContext context, Map<String, dynamic> params) =>
           LoginPage());
+  static Handler _dashboardHandler = Handler(
+      handlerFunc: (BuildContext context, Map<String, dynamic> params) =>
+          Dashboard());
   // static Handler _lessonsModule = Handler(
   //     handlerFunc: (BuildContext context, Map<String, dynamic> params) =>
   //         LessonsModule());
@@ -34,9 +38,11 @@ class FluroRouter {
 //-----------------------Routenames----------------------------------------//
   static void setupRouter() {
     router.define(Routes.def,
-        handler: _signInHandler, transitionType: TransitionType.fadeIn);
+        handler: _dashboardHandler, transitionType: TransitionType.fadeIn);
     // router.define(Routes.lessons,
     //     handler: _lessonsModule, transitionType: TransitionType.fadeIn);
+    router.define(Routes.dashboard,
+        handler: _dashboardHandler, transitionType: TransitionType.fadeIn);
     router.define(Routes.challenge,
         handler: _challengeModule, transitionType: TransitionType.fadeIn);
     router.define(Routes.courses,

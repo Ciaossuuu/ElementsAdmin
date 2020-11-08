@@ -1,23 +1,25 @@
+import 'package:elementsadmin/Strings/routes.dart';
+import 'package:flutter/material.dart';
+
 import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elementsadmin/Models/lessonModel.dart';
 
 import 'package:elementsadmin/Services/services.dart';
-import 'package:elementsadmin/Strings/routes.dart';
 import 'package:elementsadmin/Strings/textStyles.dart';
 import 'package:flutter/material.dart';
 
 import '../navigationBar.dart';
 
-class ChallengeModule extends StatefulWidget {
-  ChallengeModule({Key key}) : super(key: key);
+class Dashboard extends StatefulWidget {
+  Dashboard({Key key}) : super(key: key);
 
   @override
-  _ChallengeModuleState createState() => _ChallengeModuleState();
+  _DashboardState createState() => _DashboardState();
 }
 
-class _ChallengeModuleState extends State<ChallengeModule> {
+class _DashboardState extends State<Dashboard> {
   CollectionReference users = FirebaseFirestore.instance.collection('lessons');
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -61,7 +63,7 @@ class _ChallengeModuleState extends State<ChallengeModule> {
                   NavigationButton.buildButton(
                       text: 'Dashboard',
                       size: size,
-                      color: Colors.white,
+                      color: Colors.deepPurple[400],
                       onpressed: () {
                         Navigator.pushNamed(context, Routes.def);
                       }),
@@ -77,7 +79,7 @@ class _ChallengeModuleState extends State<ChallengeModule> {
                   NavigationButton.buildButton(
                       text: 'Challenge Module',
                       size: size,
-                      color: Colors.deepPurple[400],
+                      color: Colors.white,
                       onpressed: () {
                         Navigator.pushNamed(context, Routes.challenge);
                       }),
@@ -94,41 +96,12 @@ class _ChallengeModuleState extends State<ChallengeModule> {
             ),
           ),
           Container(
-            width: size.width * .6,
-            height: size.height,
-            child: Center(
-              child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('lessons')
-                      .orderBy('sequence')
-                      .snapshots(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.hasData) {
-                      return SingleChildScrollView(
-                        child: Wrap(
-                            children: snapshot.data.docs
-                                .map((doc) => _lessonCard(
-                                      doc: doc,
-                                    ))
-                                .toList()),
-                      );
-                    }
-
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }),
-            ),
-          ),
-          SizedBox(
-            width: size.width * .08,
-          )
+              width: size.width * .8,
+              height: size.height,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 70, 20, 20),
+              )),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Icon(Icons.add),
       ),
     );
   }

@@ -11,5 +11,6 @@ class LessonModel {
     this.description = data['description'];
     this.imageUrl = data['imageUrl'];
     this.videoUrl = data['url'];
+    this.izTaken = data['izTaken'];
   }
 }

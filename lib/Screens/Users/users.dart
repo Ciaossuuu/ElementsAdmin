@@ -1,10 +1,15 @@
 import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:elementsadmin/Models/userModel.dart';
 
 import 'package:elementsadmin/Services/services.dart';
+import 'package:elementsadmin/Services/userService.dart';
+import 'package:elementsadmin/Strings/routes.dart';
 import 'package:elementsadmin/Strings/textStyles.dart';
 import 'package:flutter/material.dart';
+
+import '../navigationBar.dart';
 
 class Users extends StatefulWidget {
   Users({Key key}) : super(key: key);
@@ -25,57 +30,11 @@ class _UsersState extends State<Users> {
     size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.deepPurple,
-        title: Text(
-          ' Elements++',
-          style: TextStyle(
-              fontFamily: 'IndieFlower',
-              fontSize: 35,
-              fontWeight: FontWeight.bold),
-        ),
-        actions: [
-          Container(
-            width: size.width * .17,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ClipOval(
-                  child: Container(
-                    width: 50,
-                    height: 50,
-                    color: Colors.red,
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'John Doe',
-                      style: CustomTextStyles.customText(
-                          isBold: true,
-                          size: FontSizes.medium,
-                          color: Colors.white),
-                    ),
-                    Text('Admin')
-                  ],
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.arrow_drop_down, size: 20),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
       body: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            width: size.width * .22,
+            width: size.width * .2,
             height: size.height,
             decoration: BoxDecoration(color: Colors.white, boxShadow: [
               BoxShadow(
@@ -86,137 +45,140 @@ class _UsersState extends State<Users> {
               )
             ]),
             child: Padding(
-              padding: const EdgeInsets.only(top: 50.0),
+              padding: const EdgeInsets.only(top: 30.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  MaterialButton(
-                    highlightColor: Colors.purple,
-                    hoverColor: Colors.deepPurple[300],
-                    height: size.height * .075,
-                    minWidth: size.width * 0.1,
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('Lessons Module',
-                          style: CustomTextStyles.customText(
-                              isBold: true, size: FontSizes.large)),
-                    ),
-                    onPressed: () => Navigator.pushNamed(context, '/lessons'),
-                  ),
-                  SizedBox(height: size.height * .02),
-                  MaterialButton(
-                    height: size.height * .075,
-                    minWidth: size.width * 0.2,
-                    highlightColor: Colors.purple,
-                    hoverColor: Colors.deepPurple[300],
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('Challenge Module',
-                          style: CustomTextStyles.customText(
-                              isBold: true, size: FontSizes.large)),
-                    ),
-                    onPressed: () => Navigator.pushNamed(context, '/challenge'),
-                  ),
-                  SizedBox(height: size.height * .02),
-                  MaterialButton(
-                    height: size.height * .075,
-                    minWidth: size.width * 0.2,
-                    color: Colors.deepPurple[400],
-                    highlightColor: Colors.purple,
-                    hoverColor: Colors.deepPurple[300],
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('Users',
-                          style: CustomTextStyles.customText(
-                              isBold: true, size: FontSizes.large)),
-                    ),
-                    onPressed: () => Navigator.pushNamed(context, '/users'),
-                  ),
+                  Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        ' Elements++',
+                        style: TextStyle(
+                            fontFamily: 'IndieFlower',
+                            fontSize: 35,
+                            fontWeight: FontWeight.bold),
+                      )),
+                  SizedBox(height: size.height * 0.05),
+                  NavigationButton.buildButton(
+                      text: 'Dashboard',
+                      size: size,
+                      color: Colors.white,
+                      onpressed: () {
+                        Navigator.pushNamed(context, Routes.def);
+                      }),
+                  SizedBox(height: size.height * 0.02),
+                  NavigationButton.buildButton(
+                      text: 'Courses Module',
+                      size: size,
+                      color: Colors.white,
+                      onpressed: () {
+                        Navigator.pushNamed(context, Routes.courses);
+                      }),
+                  SizedBox(height: size.height * 0.02),
+                  NavigationButton.buildButton(
+                      text: 'Challenge Module',
+                      size: size,
+                      color: Colors.white,
+                      onpressed: () {
+                        Navigator.pushNamed(context, Routes.challenge);
+                      }),
+                  SizedBox(height: size.height * 0.02),
+                  NavigationButton.buildButton(
+                      text: 'Users',
+                      size: size,
+                      color: Colors.deepPurple[400],
+                      onpressed: () {
+                        Navigator.pushNamed(context, Routes.users);
+                      }),
                 ],
               ),
             ),
           ),
-          Container(
-            width: size.width * .6,
-            height: size.height,
-            child: Center(
-              child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('lessons')
-                      .orderBy('sequence')
-                      .snapshots(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.hasData) {
-                      return SingleChildScrollView(
-                        child: Wrap(
-                            children: snapshot.data.docs
-                                .map((doc) => _lessonCard(
-                                      doc: doc,
-                                    ))
-                                .toList()),
-                      );
-                    }
-
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }),
+          Center(
+            child: Container(
+              width: size.width * .8,
+              height: size.height,
+              color: Colors.grey[300],
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 70, 20, 20),
+                child: Column(
+                  children: [
+                    Container(
+                      width: size.width * .7,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          MaterialButton(
+                            color: Colors.greenAccent[400],
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [Text('New User'), Icon(Icons.add)],
+                            ),
+                            onPressed: () {},
+                          ),
+                          SizedBox()
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: size.height * 0.05),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Container(
+                          width: size.width * 0.7,
+                          child: StreamBuilder(
+                              stream: FirebaseFirestore.instance
+                                  .collection('users')
+                                  .snapshots(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                                if (snapshot.hasData) {
+                                  return SingleChildScrollView(
+                                      child: Wrap(
+                                          children: snapshot.data.docs
+                                              .map<Widget>(
+                                                  (doc) => _displayUsers(
+                                                        doc: doc,
+                                                      ))
+                                              .toList()));
+                                }
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              })),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
-          SizedBox(
-            width: size.width * .08,
-          )
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Icon(Icons.add),
       ),
     );
   }
 
   //Lesson Cards
-  Widget _lessonCard({DocumentSnapshot doc}) {
-    //LessonModel lesson = LessonModel.getData(doc: doc);
-    Future getData() async {
-      var database = FirebaseFirestore.instance;
-      QuerySnapshot snapshot = await database.collection('lessons').get();
-      return snapshot.docs;
-    }
-
-    return FutureBuilder(
-      future: getData(),
-      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: SizedBox(
-              height: 210.0,
-              width: 200.0,
-              child: CircularProgressIndicator(),
-            ),
-          );
-        } else {
-          return Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Container(
-                height: size.height * .37,
-                width: size.width * .17,
-                child: GridView.count(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    crossAxisCount: 1,
-                    children: [
-                      Card(
-                          elevation: 2,
-                          child: Container(
-                            padding: EdgeInsets.all(10),
-                            color: Colors.white,
-                          ))
-                    ])),
-          );
-        }
-      },
-    );
+  _displayUsers({DocumentSnapshot doc}) {
+    size = MediaQuery.of(context).size;
+    UserModel user = UserModel.get(doc);
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('users').snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center();
+          } else {
+            return Column(
+              children: [
+                Container(
+                  color: Colors.white,
+                  child: ListTile(
+                      title: Text(user.firstName + " " + user.lastName),
+                      subtitle: Text(user.email)),
+                ),
+                SizedBox(
+                  height: size.height * 0.02,
+                )
+              ],
+            );
+          }
+        });
   }
 }
