@@ -19,7 +19,8 @@ class _CourseBuilderState extends State<CourseBuilder>
   LearningProvider _learningProvider;
 
   DocumentSnapshot doc;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKeyCourse = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKeyLesson = GlobalKey<FormState>();
   String uid, title, description, organizationName, courseImageUrl;
   getTitle(titles) {
     this.title = titles;
@@ -79,7 +80,7 @@ class _CourseBuilderState extends State<CourseBuilder>
                       child: Padding(
                         padding: const EdgeInsets.all(25),
                         child: Form(
-                          key: _formKey,
+                          key: _formKeyCourse,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -173,7 +174,14 @@ class _CourseBuilderState extends State<CourseBuilder>
                             ),
                           ),
                         ),
-                        _addButton(),
+                        MaterialButton(
+                          color: Colors.greenAccent[400],
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [Text('Add new Lesson'), Icon(Icons.add)],
+                          ),
+                          onPressed: () => _addLesson(context),
+                        ),
                       ],
                     ),
                   ),
@@ -207,10 +215,108 @@ class _CourseBuilderState extends State<CourseBuilder>
     );
   }
 
+  _addLesson(BuildContext context) {
+    String dropdownValue = 'isTaken?';
+    showDialog<String>(
+      context: context,
+      child: Container(
+        child: AlertDialog(
+          contentPadding: const EdgeInsets.all(16.0),
+          title: Text('Add Lesson'),
+          content: Container(
+            width: size.width * .6,
+            height: size.height * .7,
+            child: SingleChildScrollView(
+              child: Form(
+                key: _formKeyLesson,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      children: [
+                        Container(
+                          width: size.width * 0.09,
+                          child: TextFormField(
+                            decoration: InputDecoration(labelText: 'No.'),
+                            onChanged: (val) {},
+                          ),
+                        ),
+                        SizedBox(width: size.width * 0.01),
+                        Container(
+                          width: size.width * 0.5,
+                          child: TextFormField(
+                            decoration:
+                                InputDecoration(labelText: 'Lesson Title'),
+                            onChanged: (titles) {},
+                          ),
+                        ),
+                      ],
+                    ),
+                    TextFormField(
+                      decoration:
+                          InputDecoration(labelText: 'Lesson Description'),
+                      onChanged: (desc) {
+                        getDescription(desc);
+                      },
+                    ),
+                    TextFormField(
+                      decoration:
+                          InputDecoration(labelText: "Lesson Video URL"),
+                      onChanged: (org) {
+                        getOrganization(org);
+                      },
+                    ),
+                    TextFormField(
+                      decoration:
+                          InputDecoration(labelText: 'Lesson Image URL'),
+                      onChanged: (image) {
+                        getImageURL(image);
+                      },
+                    ),
+                    DropdownButton<bool>(
+                      hint: Text('is Taken?'),
+                      elevation: 16,
+                      style: TextStyle(color: Colors.deepPurple),
+                      underline: Container(
+                        height: 2,
+                        color: Colors.deepPurpleAccent,
+                      ),
+                      onChanged: (val) {},
+                      items: <bool>[true, false].map((bool value) {
+                        return new DropdownMenuItem<bool>(
+                          value: value,
+                          child: new Text(value.toString()),
+                        );
+                      }).toList(),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+                child: const Text('CANCEL'),
+                onPressed: () {
+                  Navigator.pop(context);
+                }),
+            new FlatButton(
+                child: const Text('ADD'),
+                onPressed: () {
+                  _formKeyLesson.currentState.validate();
+                  //DatabaseService().addCourses(doc, title, description, organizationName, courseImageUrl);
+                  Navigator.pop(context);
+                }),
+          ],
+        ),
+      ),
+    );
+  }
+
   _addButton() {
     return InkWell(
       splashColor: Colors.amber,
-      onTap: () => LearningProvider,
+      onTap: () => _addLesson(context),
       child: Container(
         width: size.width * .2,
         height: size.height * .075,
