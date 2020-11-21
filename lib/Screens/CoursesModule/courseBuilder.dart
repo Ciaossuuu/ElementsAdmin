@@ -176,15 +176,23 @@ class _CourseBuilderState extends State<CourseBuilder>
                           ),
                         ),
                         Expanded(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: lesson.map<Widget>((e) {
-                                return Card(
-                                  child: Text('lesson'),
-                                );
-                              }),
-                            ),
+                          child: ListView.builder(
+                            itemCount: lesson.length,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                title: Text(lesson[index]),
+                              );
+                            },
                           ),
+                          // child: SingleChildScrollView(
+                          //   child: Column(
+                          //     children: lesson.map<Widget>((e) {
+                          //       return Card(
+                          //         child: Text('lesson'),
+                          //       );
+                          //     }),
+                          //   ),
+                          // ),
                         )
                         // MaterialButton(
                         //   color: Colors.greenAccent[400],
