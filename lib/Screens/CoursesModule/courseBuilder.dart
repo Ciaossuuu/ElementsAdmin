@@ -21,6 +21,7 @@ class _CourseBuilderState extends State<CourseBuilder>
     LessonModel.dummyLesson(),
     LessonModel.dummyLesson()
   ];
+
   Size size;
   LearningProvider _learningProvider;
 
@@ -46,6 +47,8 @@ class _CourseBuilderState extends State<CourseBuilder>
 
   @override
   Widget build(BuildContext context) {
+    final lessonProvider =
+        Provider.of<LearningProvider>(context, listen: false);
     size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
