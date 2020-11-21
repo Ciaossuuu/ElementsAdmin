@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:elementsadmin/Models/lessonModel.dart';
 import 'package:elementsadmin/Screens/elementsAppBar.dart';
 import 'package:elementsadmin/Strings/textStyles.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,11 @@ class CourseBuilder extends StatefulWidget {
 
 class _CourseBuilderState extends State<CourseBuilder>
     with TickerProviderStateMixin {
-  List lesson = ['lesson1', 'lesson2', 'lesson3'];
+  List lesson = [
+    LessonModel.dummyLesson(),
+    LessonModel.dummyLesson(),
+    LessonModel.dummyLesson()
+  ];
   Size size;
   LearningProvider _learningProvider;
 
@@ -179,9 +184,7 @@ class _CourseBuilderState extends State<CourseBuilder>
                           child: ListView.builder(
                             itemCount: lesson.length,
                             itemBuilder: (context, index) {
-                              return ListTile(
-                                title: Text(lesson[index]),
-                              );
+                              return _buildLesson(index);
                             },
                           ),
                           // child: SingleChildScrollView(
@@ -235,9 +238,10 @@ class _CourseBuilderState extends State<CourseBuilder>
     );
   }
 
-  Widget _buildLesson(lesson) {
-    return Card(
-      child: Text(lesson),
+  _buildLesson(index) {
+    LessonModel less = this.lesson[index];
+    return ListTile(
+      title: Text(less.title),
     );
   }
 
