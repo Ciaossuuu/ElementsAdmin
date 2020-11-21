@@ -178,11 +178,11 @@ class _CourseBuilderState extends State<CourseBuilder>
                         Expanded(
                           child: SingleChildScrollView(
                             child: Column(
-                              children: [
-                                Card(
+                              children: lesson.map<Widget>((e) {
+                                return Card(
                                   child: Text('lesson'),
-                                )
-                              ],
+                                );
+                              }),
                             ),
                           ),
                         )
@@ -224,6 +224,12 @@ class _CourseBuilderState extends State<CourseBuilder>
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildLesson(lesson) {
+    return Card(
+      child: Text(lesson),
     );
   }
 
