@@ -6,6 +6,7 @@ class CourseModel {
   String description;
   String organizationName;
   String courseImageUrl;
+  bool subscribed;
   // List<String,LessonModel> lessons;
   List<LessonModel> lessons = [];
   CourseModel.getData({DocumentSnapshot doc}) {
@@ -13,6 +14,7 @@ class CourseModel {
     this.courseImageUrl = doc.data()['courseImageUrl'];
     this.description = doc.data()['description'];
     this.organizationName = doc.data()['organizationName'];
+    this.subscribed = doc.data()['subscribed'];
     //  this.lessons = doc.data()['lessons'];
     for (var item in doc.data()['lessons']) {
       // this.lessons.add(lesson);

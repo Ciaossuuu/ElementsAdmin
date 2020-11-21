@@ -140,13 +140,15 @@ class _CourseModuleState extends State<CoursesModule> {
                           builder: (BuildContext context,
                               AsyncSnapshot<QuerySnapshot> snapshot) {
                             if (snapshot.hasData) {
-                              return ListView(
-                                  shrinkWrap: true,
-                                  children: snapshot.data.docs
-                                      .map<Widget>((doc) => _courseBuilder(
-                                            doc: doc,
-                                          ))
-                                      .toList());
+                              return SingleChildScrollView(
+                                child: ListView(
+                                    shrinkWrap: true,
+                                    children: snapshot.data.docs
+                                        .map<Widget>((doc) => _courseBuilder(
+                                              doc: doc,
+                                            ))
+                                        .toList()),
+                              );
                             }
 
                             return Center(
@@ -178,45 +180,54 @@ class _CourseModuleState extends State<CoursesModule> {
               ),
             );
           } else {
-            return ExpansionTile(
-              title: Text(course.title),
-              children: <Widget>[
-                ListTile(
-                  title: Column(
-                    children: [
-                      Container(
-                        width: size.width * 0.2,
-                        child:
-                            Image(image: NetworkImage(course.courseImageUrl)),
+            return Column(
+              children: [
+                Container(
+                  child: ExpansionTile(
+                    title: Text(course.title),
+                    children: <Widget>[
+                      ListTile(
+                        title: Column(
+                          children: [
+                            Container(
+                              width: size.width * 0.2,
+                              child: Image(
+                                  image: NetworkImage(course.courseImageUrl)),
+                            ),
+                            SizedBox(height: size.height * 0.02),
+                            Text(course.description),
+                          ],
+                        ),
                       ),
-                      SizedBox(height: size.height * 0.02),
-                      Text(course.description),
+                      ListTile(
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            MaterialButton(
+                              color: Colors.blue,
+                              child: Text('View'),
+                              onPressed: () {},
+                            ),
+                            SizedBox(width: size.width * 0.01),
+                            MaterialButton(
+                              color: Colors.yellow,
+                              child: Text('Edit'),
+                              onPressed: () {},
+                            ),
+                            SizedBox(width: size.width * 0.01),
+                            MaterialButton(
+                              color: Colors.red,
+                              child: Text('Delete'),
+                              onPressed: () {},
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 ),
-                ListTile(
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      MaterialButton(
-                        color: Colors.blue,
-                        child: Text('View'),
-                        onPressed: () {},
-                      ),
-                      SizedBox(width: size.width * 0.01),
-                      MaterialButton(
-                        color: Colors.yellow,
-                        child: Text('Edit'),
-                        onPressed: () {},
-                      ),
-                      SizedBox(width: size.width * 0.01),
-                      MaterialButton(
-                        color: Colors.red,
-                        child: Text('Delete'),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
+                SizedBox(
+                  height: size.height * 0.01,
                 )
               ],
             );

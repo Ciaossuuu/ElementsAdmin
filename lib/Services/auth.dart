@@ -8,6 +8,7 @@ class AuthenticationService {
   AuthenticationService(this._firebaseAuth);
   Stream<User> get authStateChanges => _firebaseAuth.authStateChanges();
   UserService _userService = UserService();
+
   Future<String> signIn({String email, String password}) async {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
@@ -38,5 +39,10 @@ class AuthenticationService {
 
   Future<void> passwordReset({@required String email}) async {
     await _firebaseAuth.sendPasswordResetEmail(email: email);
+  }
+
+  Future<void> deleteUsers() async {
+    User user = await FirebaseAuth.instance.currentUser;
+    user.delete();
   }
 }

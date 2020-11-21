@@ -15,6 +15,7 @@ class CourseBuilder extends StatefulWidget {
 
 class _CourseBuilderState extends State<CourseBuilder>
     with TickerProviderStateMixin {
+  List lesson = ['lesson1', 'lesson2', 'lesson3'];
   Size size;
   LearningProvider _learningProvider;
 
@@ -174,14 +175,25 @@ class _CourseBuilderState extends State<CourseBuilder>
                             ),
                           ),
                         ),
-                        MaterialButton(
-                          color: Colors.greenAccent[400],
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [Text('Add new Lesson'), Icon(Icons.add)],
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                Card(
+                                  child: Text('lesson'),
+                                )
+                              ],
+                            ),
                           ),
-                          onPressed: () => _addLesson(context),
-                        ),
+                        )
+                        // MaterialButton(
+                        //   color: Colors.greenAccent[400],
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //     children: [Text('Add new Lesson'), Icon(Icons.add)],
+                        //   ),
+                        //   onPressed: () => _addLesson(context),
+                        // ),
                       ],
                     ),
                   ),
@@ -238,7 +250,7 @@ class _CourseBuilderState extends State<CourseBuilder>
                           width: size.width * 0.09,
                           child: TextFormField(
                             decoration: InputDecoration(labelText: 'No.'),
-                            onChanged: (val) {},
+                            onChanged: (seq) {},
                           ),
                         ),
                         SizedBox(width: size.width * 0.01),
