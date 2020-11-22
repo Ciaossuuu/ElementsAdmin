@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elementsadmin/Models/lessonModel.dart';
+import 'package:elementsadmin/Screens/CoursesModule/lessonsBuilder.dart';
 import 'package:elementsadmin/Screens/elementsAppBar.dart';
 import 'package:elementsadmin/Strings/textStyles.dart';
 import 'package:flutter/material.dart';
@@ -16,19 +17,12 @@ class CourseBuilder extends StatefulWidget {
 
 class _CourseBuilderState extends State<CourseBuilder>
     with TickerProviderStateMixin {
-  List lesson = [
-    LessonModel.dummyLesson(),
-    LessonModel.dummyLesson(),
-    LessonModel.dummyLesson()
-  ];
-
   Size size;
-  LearningProvider _learningProvider;
-
   DocumentSnapshot doc;
   final GlobalKey<FormState> _formKeyCourse = GlobalKey<FormState>();
-  final GlobalKey<FormState> _formKeyLesson = GlobalKey<FormState>();
-  String uid, title, description, organizationName, courseImageUrl;
+  String uid, courseImageUrl, title, description, organizationName;
+  bool subscribed;
+
   getTitle(titles) {
     this.title = titles;
   }
@@ -45,10 +39,15 @@ class _CourseBuilderState extends State<CourseBuilder>
     this.organizationName = org;
   }
 
+  List lesson = [
+    LessonModel.dummyLesson(),
+    LessonModel.dummyLesson(),
+    LessonModel.dummyLesson()
+  ];
+  LearningProvider lessonProvider;
   @override
   Widget build(BuildContext context) {
-    final lessonProvider =
-        Provider.of<LearningProvider>(context, listen: false);
+    lessonProvider = Provider.of<LearningProvider>(context, listen: false);
     size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -71,146 +70,11 @@ class _CourseBuilderState extends State<CourseBuilder>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      width: size.width * .4,
-                      height: size.height * .62,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                                blurRadius: 2,
-                                color: Colors.grey,
-                                offset: Offset(2, 2),
-                                spreadRadius: 1)
-                          ]),
-                      child: Padding(
-                        padding: const EdgeInsets.all(25),
-                        child: Form(
-                          key: _formKeyCourse,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Text(
-                                "Let’s create a course",
-                                style: CustomTextStyles.customText(
-                                    isBold: true, size: FontSizes.subHeading),
-                              ),
-                              TextFormField(
-                                maxLines: 1,
-                                decoration: InputDecoration(
-                                    labelText: 'Course Title',
-                                    labelStyle: CustomTextStyles.customText(
-                                        size: FontSizes.medium),
-                                    border: new OutlineInputBorder(
-                                        borderRadius:
-                                            new BorderRadius.circular(5.0))),
-                                onChanged: (titles) {
-                                  getTitle(titles);
-                                },
-                              ),
-                              TextFormField(
-                                textAlignVertical: TextAlignVertical.top,
-                                maxLines: 4,
-                                decoration: InputDecoration(
-                                    alignLabelWithHint: true,
-                                    labelText: 'Course Description',
-                                    labelStyle: CustomTextStyles.customText(
-                                        size: FontSizes.medium),
-                                    border: new OutlineInputBorder(
-                                        borderRadius:
-                                            new BorderRadius.circular(5.0))),
-                                onChanged: (desc) {
-                                  getDescription(desc);
-                                },
-                              ),
-                              TextFormField(
-                                maxLines: 1,
-                                decoration: InputDecoration(
-                                    labelText: "Organization's Name",
-                                    labelStyle: CustomTextStyles.customText(
-                                        size: FontSizes.medium),
-                                    border: new OutlineInputBorder(
-                                        borderRadius:
-                                            new BorderRadius.circular(5.0))),
-                                onChanged: (org) {
-                                  getOrganization(org);
-                                },
-                              ),
-                              TextFormField(
-                                maxLines: 1,
-                                decoration: InputDecoration(
-                                    labelText: 'Course Image URL',
-                                    labelStyle: CustomTextStyles.customText(
-                                        size: FontSizes.medium),
-                                    border: new OutlineInputBorder(
-                                        borderRadius:
-                                            new BorderRadius.circular(5.0))),
-                                onChanged: (image) {
-                                  getImageURL(image);
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      //color: Colors.red,
-                    ),
-                  ),
+                  _createCourse(),
                   SizedBox(
                     height: size.height * .1,
                   ),
-                  Container(
-                    width: size.width * 0.4,
-                    height: size.height * 0.62,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Padding(
-                            padding: EdgeInsets.all(25),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Lessons",
-                                  style: CustomTextStyles.customText(
-                                      isBold: true, size: FontSizes.subHeading),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: lesson.length,
-                            itemBuilder: (context, index) {
-                              return _buildLesson(index);
-                            },
-                          ),
-                          // child: SingleChildScrollView(
-                          //   child: Column(
-                          //     children: lesson.map<Widget>((e) {
-                          //       return Card(
-                          //         child: Text('lesson'),
-                          //       );
-                          //     }),
-                          //   ),
-                          // ),
-                        )
-                        // MaterialButton(
-                        //   color: Colors.greenAccent[400],
-                        //   child: Row(
-                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //     children: [Text('Add new Lesson'), Icon(Icons.add)],
-                        //   ),
-                        //   onPressed: () => _addLesson(context),
-                        // ),
-                      ],
-                    ),
-                  ),
+                  LessonBuilder(),
                 ],
               ),
               SizedBox(height: size.height * 0.05),
@@ -241,149 +105,90 @@ class _CourseBuilderState extends State<CourseBuilder>
     );
   }
 
-  _buildLesson(index) {
-    LessonModel less = this.lesson[index];
-    return ListTile(
-      title: Text(less.title),
-    );
-  }
-
-  _addLesson(BuildContext context) {
-    String dropdownValue = 'isTaken?';
-    showDialog<String>(
-      context: context,
+  _createCourse() {
+    return Align(
+      alignment: Alignment.centerLeft,
       child: Container(
-        child: AlertDialog(
-          contentPadding: const EdgeInsets.all(16.0),
-          title: Text('Add Lesson'),
-          content: Container(
-            width: size.width * .6,
-            height: size.height * .7,
-            child: SingleChildScrollView(
-              child: Form(
-                key: _formKeyLesson,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        Container(
-                          width: size.width * 0.09,
-                          child: TextFormField(
-                            decoration: InputDecoration(labelText: 'No.'),
-                            onChanged: (seq) {},
-                          ),
-                        ),
-                        SizedBox(width: size.width * 0.01),
-                        Container(
-                          width: size.width * 0.5,
-                          child: TextFormField(
-                            decoration:
-                                InputDecoration(labelText: 'Lesson Title'),
-                            onChanged: (titles) {},
-                          ),
-                        ),
-                      ],
-                    ),
-                    TextFormField(
-                      decoration:
-                          InputDecoration(labelText: 'Lesson Description'),
-                      onChanged: (desc) {
-                        getDescription(desc);
-                      },
-                    ),
-                    TextFormField(
-                      decoration:
-                          InputDecoration(labelText: "Lesson Video URL"),
-                      onChanged: (org) {
-                        getOrganization(org);
-                      },
-                    ),
-                    TextFormField(
-                      decoration:
-                          InputDecoration(labelText: 'Lesson Image URL'),
-                      onChanged: (image) {
-                        getImageURL(image);
-                      },
-                    ),
-                    DropdownButton<bool>(
-                      hint: Text('is Taken?'),
-                      elevation: 16,
-                      style: TextStyle(color: Colors.deepPurple),
-                      underline: Container(
-                        height: 2,
-                        color: Colors.deepPurpleAccent,
-                      ),
-                      onChanged: (val) {},
-                      items: <bool>[true, false].map((bool value) {
-                        return new DropdownMenuItem<bool>(
-                          value: value,
-                          child: new Text(value.toString()),
-                        );
-                      }).toList(),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-          actions: <Widget>[
-            new FlatButton(
-                child: const Text('CANCEL'),
-                onPressed: () {
-                  Navigator.pop(context);
-                }),
-            new FlatButton(
-                child: const Text('ADD'),
-                onPressed: () {
-                  _formKeyLesson.currentState.validate();
-                  //DatabaseService().addCourses(doc, title, description, organizationName, courseImageUrl);
-                  Navigator.pop(context);
-                }),
-          ],
-        ),
-      ),
-    );
-  }
-
-  _addButton() {
-    return InkWell(
-      splashColor: Colors.amber,
-      onTap: () => _addLesson(context),
-      child: Container(
-        width: size.width * .2,
-        height: size.height * .075,
+        width: size.width * .4,
+        height: size.height * .62,
         decoration: BoxDecoration(
-            color: Color.fromRGBO(154, 211, 188, 1),
-            borderRadius: BorderRadius.circular(25)),
-        child: Center(
-          child: ClipOval(
-            child: Container(
-              width: 50,
-              height: 50,
-              color: Color.fromRGBO(235, 89, 82, 1),
-              child: Icon(
-                Icons.add,
-                color: Colors.white,
-              ),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(
+                  blurRadius: 2,
+                  color: Colors.grey,
+                  offset: Offset(2, 2),
+                  spreadRadius: 1)
+            ]),
+        child: Padding(
+          padding: const EdgeInsets.all(25),
+          child: Form(
+            key: _formKeyCourse,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  "Let’s create a course",
+                  style: CustomTextStyles.customText(
+                      isBold: true, size: FontSizes.subHeading),
+                ),
+                TextFormField(
+                  maxLines: 1,
+                  decoration: InputDecoration(
+                      labelText: 'Course Title',
+                      labelStyle:
+                          CustomTextStyles.customText(size: FontSizes.medium),
+                      border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(5.0))),
+                  onChanged: (titles) {
+                    getTitle(titles);
+                  },
+                ),
+                TextFormField(
+                  textAlignVertical: TextAlignVertical.top,
+                  maxLines: 4,
+                  decoration: InputDecoration(
+                      alignLabelWithHint: true,
+                      labelText: 'Course Description',
+                      labelStyle:
+                          CustomTextStyles.customText(size: FontSizes.medium),
+                      border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(5.0))),
+                  onChanged: (desc) {
+                    getDescription(desc);
+                  },
+                ),
+                TextFormField(
+                  maxLines: 1,
+                  decoration: InputDecoration(
+                      labelText: "Organization's Name",
+                      labelStyle:
+                          CustomTextStyles.customText(size: FontSizes.medium),
+                      border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(5.0))),
+                  onChanged: (org) {
+                    getOrganization(org);
+                  },
+                ),
+                TextFormField(
+                  maxLines: 1,
+                  decoration: InputDecoration(
+                      labelText: 'Course Image URL',
+                      labelStyle:
+                          CustomTextStyles.customText(size: FontSizes.medium),
+                      border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(5.0))),
+                  onChanged: (image) {
+                    getImageURL(image);
+                  },
+                ),
+              ],
             ),
           ),
         ),
+        //color: Colors.red,
       ),
-    );
-  }
-
-  _buildTextFormField({
-    TextEditingController controller,
-    @required String label,
-    int maxLines,
-  }) {
-    return TextFormField(
-      maxLines: maxLines ?? 1,
-      decoration: InputDecoration(
-          labelText: label,
-          labelStyle: CustomTextStyles.customText(size: FontSizes.medium)),
-      onChanged: (val) {},
     );
   }
 }

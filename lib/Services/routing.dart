@@ -2,7 +2,7 @@ import 'package:elementsadmin/Screens/CoursesModule/courseBuilder.dart';
 import 'package:elementsadmin/Screens/CoursesModule/coursesModule.dart';
 import 'package:elementsadmin/Screens/Dashboard/dashboard.dart';
 import 'package:fluro/fluro.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Router;
 
 import 'package:elementsadmin/Strings/routes.dart';
 import 'package:elementsadmin/Screens/Authentication/login.dart';

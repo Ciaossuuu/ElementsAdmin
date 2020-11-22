@@ -19,7 +19,7 @@ class LessonModel {
     this.correctAnswer = data['correctAnswer'];
     this.choices = data['choices'];
   }
-
+  LessonModel() {}
   LessonModel.dummyLesson() {
     this.title = 'dummy';
   }
