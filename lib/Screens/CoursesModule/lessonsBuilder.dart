@@ -18,7 +18,7 @@ class _LessonBuilderState extends State<LessonBuilder> {
   bool izTaken;
   List<String> choices = [];
 
-  List lesson = [];
+  List lesson;
 
   getSequence(seq) {
     this.sequence = seq;
@@ -58,7 +58,8 @@ class _LessonBuilderState extends State<LessonBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    _learningProvider = Provider.of<LearningProvider>(context, listen: false);
+    _learningProvider = Provider.of<LearningProvider>(context, listen: true);
+    this.lesson = _learningProvider.lessons;
     size = MediaQuery.of(context).size;
     return Container(
       width: size.width * 0.4,
@@ -129,6 +130,7 @@ class _LessonBuilderState extends State<LessonBuilder> {
   _addLesson(BuildContext context) {
     String dropdownValue = 'isTaken?';
     LessonModel lesson = LessonModel();
+    TextEditingController question = TextEditingController();
     _learningProvider.addLesson(lesson: lesson);
     showDialog<String>(
       context: context,
@@ -164,7 +166,7 @@ class _LessonBuilderState extends State<LessonBuilder> {
                                 InputDecoration(labelText: 'Lesson Title'),
                             onChanged: (titles) {
                               getTitle(titles);
-                              lesson.title = titles
+                              lesson.title = titles;
                             },
                           ),
                         ),
