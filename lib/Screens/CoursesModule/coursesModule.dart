@@ -312,8 +312,7 @@ class _CourseModuleState extends State<CoursesModule> {
                 child: const Text('ADD'),
                 onPressed: () {
                   _formKey.currentState.validate();
-                  DatabaseService().addCourses(doc, title, description,
-                      organizationName, courseImageUrl);
+                  //DatabaseService().addLesson(sequence, title, description, videoUrl, imageUrl, question, choices, correctAnswer, izTaken);
                   Navigator.pop(context);
                 }),
           ],

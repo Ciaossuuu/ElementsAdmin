@@ -1,11 +1,13 @@
 import 'package:elementsadmin/Models/lessonModel.dart';
 import 'package:elementsadmin/Provider/learningProvider.dart';
+import 'package:elementsadmin/Services/services.dart';
 import 'package:elementsadmin/Strings/textStyles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LessonBuilder extends StatefulWidget {
-  LessonBuilder({Key key}) : super(key: key);
+  LessonBuilder({Key key, this.lessons}) : super(key: key);
+  final List lessons;
   @override
   _LessonBuilderState createState() => _LessonBuilderState();
 }
@@ -14,11 +16,17 @@ class _LessonBuilderState extends State<LessonBuilder> {
   final GlobalKey<FormState> _formKeyLesson = GlobalKey<FormState>();
   Size size;
   LearningProvider _learningProvider;
-  String sequence, title, description, imageUrl, url, question, correctAnswer;
-  bool izTaken;
+  String sequence,
+      title,
+      description,
+      imageUrl,
+      videoUrl,
+      question,
+      correctAnswer;
+  bool izTaken = false;
   List<String> choices = [];
 
-  List lesson;
+  List lessons;
 
   getSequence(seq) {
     this.sequence = seq;
@@ -37,7 +45,7 @@ class _LessonBuilderState extends State<LessonBuilder> {
   }
 
   getVideoURL(video) {
-    this.url = video;
+    this.videoUrl = video;
   }
 
   getQuestion(questions) {
@@ -59,7 +67,7 @@ class _LessonBuilderState extends State<LessonBuilder> {
   @override
   Widget build(BuildContext context) {
     _learningProvider = Provider.of<LearningProvider>(context, listen: true);
-    this.lesson = _learningProvider.lessons;
+    this.lessons = _learningProvider.lessons;
     size = MediaQuery.of(context).size;
     return Container(
       width: size.width * 0.4,
@@ -92,22 +100,9 @@ class _LessonBuilderState extends State<LessonBuilder> {
               onPressed: () => _addLesson(context),
             ),
           ),
-          // Card(
-          //   child: ListTile(
-          //     title: Text('Lesson 1'),
-          //     subtitle: Text('Description'),
-          //     leading: Column(
-          //       crossAxisAlignment: CrossAxisAlignment.center,
-          //       mainAxisAlignment: MainAxisAlignment.center,
-          //       children: [
-          //         Text('01'),
-          //       ],
-          //     ),
-          //   ),
-          // ),
           Expanded(
             child: ListView.builder(
-              itemCount: lesson.length,
+              itemCount: lessons.length,
               itemBuilder: (context, index) {
                 return _buildLesson(index);
               },
@@ -119,19 +114,24 @@ class _LessonBuilderState extends State<LessonBuilder> {
   }
 
   _buildLesson(index) {
-    LessonModel less = this.lesson[index];
+    LessonModel less = this.lessons[index];
     return Card(
       child: ListTile(
-        title: Text(less.title),
+        title: Text(less.title ?? ''),
+        subtitle: Text(less.description ?? ''),
+        leading: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [Text('${less.sequence ?? ''}')],
+        ),
       ),
     );
   }
 
   _addLesson(BuildContext context) {
-    String dropdownValue = 'isTaken?';
+    bool dropdownValue = false;
     LessonModel lesson = LessonModel();
-    TextEditingController question = TextEditingController();
-    _learningProvider.addLesson(lesson: lesson);
+    //TextEditingController question = TextEditingController();
     showDialog<String>(
       context: context,
       child: Container(
@@ -140,7 +140,7 @@ class _LessonBuilderState extends State<LessonBuilder> {
           title: Text('Add Lesson'),
           content: Container(
             width: size.width * .6,
-            height: size.height * .3,
+            height: size.height * .7,
             child: SingleChildScrollView(
               child: Form(
                 key: _formKeyLesson,
@@ -152,9 +152,11 @@ class _LessonBuilderState extends State<LessonBuilder> {
                         Container(
                           width: size.width * 0.09,
                           child: TextFormField(
+                            keyboardType: TextInputType.number,
                             decoration: InputDecoration(labelText: 'No.'),
                             onChanged: (seq) {
                               getSequence(seq);
+                              lesson.sequence = int.parse(seq);
                             },
                           ),
                         ),
@@ -177,100 +179,83 @@ class _LessonBuilderState extends State<LessonBuilder> {
                           InputDecoration(labelText: 'Lesson Description'),
                       onChanged: (desc) {
                         getDescription(desc);
+                        lesson.description = desc;
                       },
                     ),
-                    // TextFormField(
-                    //   decoration:
-                    //       InputDecoration(labelText: "Lesson Video URL"),
-                    //   onChanged: (video) {
-                    //     getVideoURL(video);
-                    //   },
-                    // ),
-                    // TextFormField(
-                    //   decoration:
-                    //       InputDecoration(labelText: 'Lesson Image URL'),
-                    //   onChanged: (image) {
-                    //     getImageURL(image);
-                    //   },
-                    // ),
-                    // DropdownButton<bool>(
-                    //   hint: Text('is Taken?'),
-                    //   elevation: 16,
-                    //   style: TextStyle(color: Colors.deepPurple),
-                    //   underline: Container(
-                    //     height: 2,
-                    //     color: Colors.deepPurpleAccent,
-                    //   ),
-                    //   onChanged: (taken) {
-                    //     getIzTaken(taken);
-                    //   },
-                    //   items: <bool>[true, false].map((bool value) {
-                    //     return new DropdownMenuItem<bool>(
-                    //       value: value,
-                    //       child: new Text(value.toString()),
-                    //     );
-                    //   }).toList(),
-                    // ),
-                    // TextFormField(
-                    //   decoration: InputDecoration(labelText: 'Question'),
-                    //   onChanged: (String question) {
-                    //     getQuestion(question);
-                    //   },
-                    // ),
-                    // Row(
-                    //   children: [
-                    //     Container(
-                    //       width: size.width * .1,
-                    //       child: TextFormField(
-                    //         decoration: InputDecoration(labelText: 'Choice 1'),
-                    //         validator: (value) {
-                    //           choices.add(value);
-                    //           return;
-                    //         },
-                    //       ),
-                    //     ),
-                    //     Container(
-                    //       width: size.width * .1,
-                    //       child: TextFormField(
-                    //         decoration: InputDecoration(labelText: 'Choice 2'),
-                    //         validator: (value) {
-                    //           choices.add(value);
-                    //           return;
-                    //         },
-                    //       ),
-                    //     )
-                    //   ],
-                    // ),
-                    // Row(
-                    //   children: [
-                    //     Container(
-                    //       width: size.width * .1,
-                    //       child: TextFormField(
-                    //         decoration: InputDecoration(labelText: 'Choice 3'),
-                    //         validator: (value) {
-                    //           choices.add(value);
-                    //           return;
-                    //         },
-                    //       ),
-                    //     ),
-                    //     Container(
-                    //       width: size.width * .1,
-                    //       child: TextFormField(
-                    //         decoration: InputDecoration(labelText: 'Choice 4'),
-                    //         validator: (value) {
-                    //           choices.add(value);
-                    //           return;
-                    //         },
-                    //       ),
-                    //     )
-                    //   ],
-                    // ),
-                    // TextFormField(
-                    //   decoration: InputDecoration(labelText: 'Correct Answer'),
-                    //   onChanged: (String correctAnswer) {
-                    //     getCorrectAns(correctAnswer);
-                    //   },
-                    // ),
+                    TextFormField(
+                      decoration:
+                          InputDecoration(labelText: "Lesson Video URL"),
+                      onChanged: (video) {
+                        getVideoURL(video);
+                      },
+                    ),
+                    TextFormField(
+                      decoration:
+                          InputDecoration(labelText: 'Lesson Image URL'),
+                      onChanged: (image) {
+                        getImageURL(image);
+                      },
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(labelText: 'Question'),
+                      onChanged: (String question) {
+                        getQuestion(question);
+                      },
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: size.width * .1,
+                          child: TextFormField(
+                            decoration: InputDecoration(labelText: 'Choice 1'),
+                            validator: (value) {
+                              choices.add(value);
+                              return;
+                            },
+                          ),
+                        ),
+                        Container(
+                          width: size.width * .1,
+                          child: TextFormField(
+                            decoration: InputDecoration(labelText: 'Choice 2'),
+                            validator: (value) {
+                              choices.add(value);
+                              return;
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: size.width * .1,
+                          child: TextFormField(
+                            decoration: InputDecoration(labelText: 'Choice 3'),
+                            validator: (value) {
+                              choices.add(value);
+                              return;
+                            },
+                          ),
+                        ),
+                        Container(
+                          width: size.width * .1,
+                          child: TextFormField(
+                            decoration: InputDecoration(labelText: 'Choice 4'),
+                            validator: (value) {
+                              choices.add(value);
+                              return;
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(labelText: 'Correct Answer'),
+                      onChanged: (String correctAnswer) {
+                        getCorrectAns(correctAnswer);
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -286,9 +271,9 @@ class _LessonBuilderState extends State<LessonBuilder> {
                 child: const Text('ADD'),
                 onPressed: () {
                   _formKeyLesson.currentState.validate();
-                  //DatabaseService().addCourses(doc, title, description, organizationName, courseImageUrl);
                   _learningProvider.addLesson(lesson: lesson);
-                  print(lesson);
+                  //DatabaseService().addLesson(sequence, title, description, videoUrl, imageUrl, question, choices, correctAnswer, izTaken);
+                  print(lesson.sequence);
                   Navigator.pop(context);
                 }),
           ],

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elementsadmin/Models/lessonModel.dart';
 import 'package:elementsadmin/Screens/CoursesModule/lessonsBuilder.dart';
 import 'package:elementsadmin/Screens/elementsAppBar.dart';
+import 'package:elementsadmin/Services/services.dart';
 import 'package:elementsadmin/Strings/textStyles.dart';
 import 'package:flutter/material.dart';
 import 'package:elementsadmin/Screens/navigationBar.dart';
@@ -19,9 +20,11 @@ class _CourseBuilderState extends State<CourseBuilder>
     with TickerProviderStateMixin {
   Size size;
   DocumentSnapshot doc;
+  LearningProvider _learningProvider;
   final GlobalKey<FormState> _formKeyCourse = GlobalKey<FormState>();
   String uid, courseImageUrl, title, description, organizationName;
-  bool subscribed;
+  bool subscribed = false;
+  List lessons;
 
   getTitle(titles) {
     this.title = titles;
@@ -39,15 +42,9 @@ class _CourseBuilderState extends State<CourseBuilder>
     this.organizationName = org;
   }
 
-  List lesson = [
-    LessonModel.dummyLesson(),
-    LessonModel.dummyLesson(),
-    LessonModel.dummyLesson()
-  ];
-  LearningProvider lessonProvider;
   @override
   Widget build(BuildContext context) {
-    lessonProvider = Provider.of<LearningProvider>(context, listen: false);
+    _learningProvider = Provider.of<LearningProvider>(context, listen: true);
     size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -94,7 +91,16 @@ class _CourseBuilderState extends State<CourseBuilder>
                     child: Text('SAVE',
                         style: CustomTextStyles.customText(
                             isBold: true, size: FontSizes.small)),
-                    onPressed: () {},
+                    onPressed: () {
+                      DatabaseService().addCourses(
+                          doc,
+                          title,
+                          description,
+                          LessonBuilder(lessons: lessons),
+                          organizationName,
+                          courseImageUrl,
+                          subscribed);
+                    },
                   ),
                 ],
               )

@@ -12,32 +12,29 @@ class DatabaseService {
 
   //add
   Future<void> addLesson(
-    String ref,
-    String sequence,
-    String title,
-    String video_url,
-    String video_time,
-    String header,
-    String description,
-    String banner_url,
-    String question,
-    List choices,
-    String correctAnswer,
-  ) async {
+      //String ref,
+      DocumentSnapshot doc,
+      int sequence,
+      String title,
+      String description,
+      String videoUrl,
+      String imageUrl,
+      String question,
+      List choices,
+      String correctAnswer,
+      bool izTaken) async {
     return lesson
-        .doc(sequence)
+        .doc(doc.id)
         .set({
-          'ref': sequence,
           'sequence': sequence,
           'title': title,
-          'video_url': video_url,
-          'video_time': video_time,
-          'header': header,
           'description': description,
-          'banner_url': banner_url,
+          'url': videoUrl,
+          'imageUrl': imageUrl,
           'question': question,
           'choices': choices,
-          'correctAnswer': correctAnswer
+          'correctAnswer': correctAnswer,
+          'izTaken': izTaken
         })
         .then((value) => print("Lesson Added"))
         .catchError((error) => print("Failed to add lesson: $error"));
@@ -70,14 +67,16 @@ class DatabaseService {
   }
 
   //add courses
-  Future<void> addCourses(DocumentSnapshot doc, title, description,
-      organizationName, courseImageUrl) async {
+  Future<void> addCourses(DocumentSnapshot doc, title, description, lessons,
+      organizationName, courseImageUrl, subscribed) async {
     return courses
         .add({
           'title': title,
           'description': description,
           'organizationName': organizationName,
-          'courseImageURL': courseImageUrl
+          'lesson': lessons,
+          'courseImageURL': courseImageUrl,
+          'subscribed': subscribed
         })
         .then((value) => print("Course Added"))
         .catchError((error) => print("Failed to add course: $error"));
