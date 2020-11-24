@@ -1,4 +1,5 @@
 import 'package:elementsadmin/Provider/learningProvider.dart';
+import 'package:elementsadmin/Provider/questionProvider.dart';
 import 'package:elementsadmin/Screens/Dashboard/dashboard.dart';
 import 'package:elementsadmin/Screens/LessonsModule/lessonsModule.dart';
 import 'package:elementsadmin/Screens/Authentication/login.dart';
@@ -19,6 +20,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<LearningProvider>(
             create: (_) => LearningProvider()),
+        ChangeNotifierProvider<QuestionProvider>(
+            create: (_) => QuestionProvider()),
       ],
       child: MaterialApp(
           onGenerateRoute: FluroRouter.router.generator,

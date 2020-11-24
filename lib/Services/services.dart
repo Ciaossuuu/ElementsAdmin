@@ -9,6 +9,8 @@ class DatabaseService {
   CollectionReference courses =
       FirebaseFirestore.instance.collection('courses');
   CollectionReference users = FirebaseFirestore.instance.collection('users');
+  CollectionReference quizzes =
+      FirebaseFirestore.instance.collection('quizzes');
   FirebaseAuth auth = FirebaseAuth.instance;
   UserModel user = UserModel();
 
@@ -114,6 +116,17 @@ class DatabaseService {
             .then((value) => print("User's Course Added"))
             .catchError((error) => print("Failed to add course: $error"));
       });
+    });
+  }
+
+  Future<void> addQuizzes(DocumentSnapshot doc, String title, String level,
+      int score, bool isTaken, List questions) async {
+    return quizzes.doc(doc.id).set({
+      'title': title,
+      'level': level,
+      'score': score,
+      'isTaken': isTaken,
+      'questions': questions,
     });
   }
 }

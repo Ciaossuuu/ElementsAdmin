@@ -2,6 +2,8 @@ import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elementsadmin/Models/lessonModel.dart';
+import 'package:elementsadmin/Models/quizModel.dart';
+import 'package:elementsadmin/Screens/ChallengeModule/CreateQuiz/quizBuilder.dart';
 
 import 'package:elementsadmin/Services/services.dart';
 import 'package:elementsadmin/Strings/routes.dart';
@@ -29,26 +31,37 @@ class _ChallengeModuleState extends State<ChallengeModule> {
     size = MediaQuery.of(context).size;
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (_) {
+            return QuizBuilder();
+          }));
+        },
+        child: Icon(Icons.add),
+      ),
       body: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          NavigationBar(navItem: 3),
+          NavigationBar(
+            navItem: 3,
+          ),
           Container(
-            width: size.width * .6,
+            width: size.width * .8,
             height: size.height,
-            child: Center(
+            color: Colors.white,
+            child: Padding(
+              padding: EdgeInsets.all(35),
               child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('quizzes')
-                      .orderBy('sequence')
                       .snapshots(),
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshot) {
                     if (snapshot.hasData) {
-                      return SingleChildScrollView(
-                        child: Wrap(
+                      return Scrollbar(
+                        child: ListView(
+                            shrinkWrap: true,
                             children: snapshot.data.docs
-                                .map((doc) => _lessonCard(
+                                .map<Widget>((doc) => _quizBuilder(
                                       doc: doc,
                                     ))
                                 .toList()),
@@ -61,56 +74,40 @@ class _ChallengeModuleState extends State<ChallengeModule> {
                   }),
             ),
           ),
-          SizedBox(
-            width: size.width * .08,
-          )
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Icon(Icons.add),
       ),
     );
   }
 
-  //Lesson Cards
-  Widget _lessonCard({DocumentSnapshot doc}) {
-    // LessonModel lesson = LessonModel.getData(doc: doc);
-    Future getData() async {
-      var database = FirebaseFirestore.instance;
-      QuerySnapshot snapshot = await database.collection('lessons').get();
-      return snapshot.docs;
-    }
-
-    return FutureBuilder(
-      future: getData(),
+  _quizBuilder({DocumentSnapshot doc}) {
+    QuizModel quiz = QuizModel.getData(doc: doc);
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance.collection('quizzes').snapshots(),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
             child: SizedBox(
               height: 210.0,
               width: 200.0,
-              child: CircularProgressIndicator(),
             ),
           );
         } else {
-          return Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Container(
-                height: size.height * .37,
-                width: size.width * .17,
-                child: GridView.count(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    crossAxisCount: 1,
-                    children: [
-                      Card(
-                          elevation: 2,
-                          child: Container(
-                            padding: EdgeInsets.all(10),
-                            color: Colors.white,
-                          ))
-                    ])),
+          return Column(
+            children: [
+              Container(
+                child:
+                    ExpansionTile(title: Text(quiz.level), children: <Widget>[
+                  ListTile(
+                    title: Column(
+                      children: [
+                        SizedBox(height: size.height * 0.02),
+                        Text('${quiz.score}'),
+                      ],
+                    ),
+                  ),
+                ]),
+              )
+            ],
           );
         }
       },
