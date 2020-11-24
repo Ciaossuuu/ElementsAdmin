@@ -48,13 +48,15 @@ class _CourseModuleState extends State<CoursesModule> {
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshot) {
                     if (snapshot.hasData) {
-                      return ListView(
-                          shrinkWrap: true,
-                          children: snapshot.data.docs
-                              .map<Widget>((doc) => _courseBuilder(
-                                    doc: doc,
-                                  ))
-                              .toList());
+                      return Scrollbar(
+                        child: ListView(
+                            shrinkWrap: true,
+                            children: snapshot.data.docs
+                                .map<Widget>((doc) => _courseBuilder(
+                                      doc: doc,
+                                    ))
+                                .toList()),
+                      );
                     }
 
                     return Center(
@@ -105,23 +107,23 @@ class _CourseModuleState extends State<CoursesModule> {
                         title: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            MaterialButton(
-                              color: Colors.blue,
-                              child: Text('View'),
-                              onPressed: () {},
-                            ),
-                            SizedBox(width: size.width * 0.01),
-                            MaterialButton(
-                              color: Colors.yellow,
-                              child: Text('Edit'),
-                              onPressed: () {},
-                            ),
-                            SizedBox(width: size.width * 0.01),
-                            MaterialButton(
-                              color: Colors.red,
-                              child: Text('Delete'),
-                              onPressed: () {},
-                            ),
+                            // MaterialButton(
+                            //   color: Colors.blue,
+                            //   child: Text('View'),
+                            //   onPressed: () {},
+                            // ),
+                            // SizedBox(width: size.width * 0.01),
+                            // MaterialButton(
+                            //   color: Colors.yellow,
+                            //   child: Text('Edit'),
+                            //   onPressed: () {},
+                            // ),
+                            // SizedBox(width: size.width * 0.01),
+                            // MaterialButton(
+                            //   color: Colors.red,
+                            //   child: Text('Delete'),
+                            //   onPressed: () {},
+                            // ),
                           ],
                         ),
                       )

@@ -116,12 +116,13 @@ class _CourseBuilderState extends State<CourseBuilder> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   MaterialButton(
-                    color: Colors.red,
-                    child: Text('CANCEL',
-                        style: CustomTextStyles.customText(
-                            isBold: true, size: FontSizes.small)),
-                    onPressed: () {},
-                  ),
+                      color: Colors.red,
+                      child: Text('CANCEL',
+                          style: CustomTextStyles.customText(
+                              isBold: true, size: FontSizes.small)),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      }),
                   SizedBox(width: size.width * 0.02),
                   MaterialButton(
                     color: Colors.green,
@@ -129,15 +130,32 @@ class _CourseBuilderState extends State<CourseBuilder> {
                         style: CustomTextStyles.customText(
                             isBold: true, size: FontSizes.small)),
                     onPressed: () {
-                      CourseModel course = CourseModel();
-                      course.title = title.text;
-                      course.description = description.text;
-                      course.organizationName = organizationName.text;
-                      course.courseImageUrl = coureImageUrl.text;
-                      course.lessons = _learningProvider.lessons;
-                      DatabaseService()
-                          .addCourses(courseModel: course)
-                          .then((value) => Navigator.pop(context));
+                      if (title.text != '') {
+                        CourseModel course = CourseModel();
+                        course.title = title.text;
+                        course.description = description.text;
+                        course.organizationName = organizationName.text;
+                        course.courseImageUrl = coureImageUrl.text;
+                        course.lessons = _learningProvider.lessons;
+                        DatabaseService()
+                            .addCourses(courseModel: course)
+                            .then((value) {
+                          showAlertDialog(
+                            context: context,
+                            message: 'Course Added',
+                            title: 'Success',
+                          );
+                        });
+                        Future.delayed(Duration(seconds: 2), () {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        });
+                      } else {
+                        showAlertDialog(
+                            context: context,
+                            message: 'Please Input a Course',
+                            title: 'Error');
+                      }
                     },
                   ),
                 ],
@@ -161,6 +179,27 @@ class _CourseBuilderState extends State<CourseBuilder> {
           labelStyle: CustomTextStyles.customText(size: FontSizes.medium),
           border: new OutlineInputBorder(
               borderRadius: new BorderRadius.circular(5.0))),
+    );
+  }
+
+  showAlertDialog(
+      {@required BuildContext context,
+      @required String title,
+      @required String message}) {
+    // set up the button
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text(title),
+      content: Text(message),
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }

@@ -50,6 +50,6 @@ class FluroRouter {
     router.define(Routes.users,
         handler: _users, transitionType: TransitionType.fadeIn);
     router.define(Routes.courseBuilder,
-        handler: _courseBuilder, transitionType: TransitionType.cupertino);
+        handler: _courseBuilder, transitionType: TransitionType.fadeIn);
   }
 }

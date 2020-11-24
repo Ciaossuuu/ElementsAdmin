@@ -75,7 +75,27 @@ class DatabaseService {
     return courses
         .add(map)
         .then((value) => print("Course Added"))
-        .catchError((error) => print("Failed to add course: $error"));
+        .catchError((error) => print("Failed to add course: $error"))
+        .then((value) async {
+      await FirebaseFirestore.instance.collection('users').get().then((value) {
+        value.docs.forEach((user) {
+          addCourseToUser(map: map, uid: user.id);
+        });
+      });
+    });
+  }
+
+  void addCourseToUser({String uid, map}) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('courses')
+          .add(map)
+          .then((value) => print('success added to users'));
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   Future<void> addCoursesToUsers(

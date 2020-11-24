@@ -39,7 +39,7 @@ class _ChallengeModuleState extends State<ChallengeModule> {
             child: Center(
               child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
-                      .collection('lessons')
+                      .collection('quizzes')
                       .orderBy('sequence')
                       .snapshots(),
                   builder: (BuildContext context,
