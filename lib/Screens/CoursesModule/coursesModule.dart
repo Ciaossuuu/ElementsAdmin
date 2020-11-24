@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elementsadmin/Models/courseModel.dart';
-import 'package:elementsadmin/Screens/CoursesModule/courseBuilder.dart';
+import 'package:elementsadmin/Screens/CoursesModule/CreateCourse/courseBuilder.dart';
 import 'package:elementsadmin/Screens/elementsAppBar.dart';
 import 'package:elementsadmin/Screens/navigationBar.dart';
 import 'package:elementsadmin/Services/services.dart';
@@ -40,6 +40,10 @@ class _CourseModuleState extends State<CoursesModule> {
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(Icons.add),
+      ),
       body: Row(
         children: [
           Container(

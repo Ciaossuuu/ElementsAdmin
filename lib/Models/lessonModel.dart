@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class LessonModel {
   String title;
   int sequence;
@@ -22,5 +24,19 @@ class LessonModel {
   LessonModel() {}
   LessonModel.dummyLesson() {
     this.title = 'dummy';
+  }
+  toMap({@required LessonModel lesson}) {
+    var map = {
+      'title': lesson.title,
+      'sequence': lesson.sequence,
+      'description': lesson.description,
+      'videoUrl': lesson.videoUrl,
+      'imageUrl': lesson.imageUrl,
+      'izTaken': lesson.izTaken,
+      'question': lesson.question,
+      'correctAnswer': lesson.correctAnswer,
+      'choices': lesson.choices
+    };
+    return map;
   }
 }

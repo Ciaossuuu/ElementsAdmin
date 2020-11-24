@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elementsadmin/Models/lessonModel.dart';
+import 'package:flutter/material.dart';
 
 class CourseModel {
   String title;
@@ -23,5 +24,23 @@ class CourseModel {
       lessons.add(less);
     }
     // print(lessons.length);
+  }
+  CourseModel() {}
+  static toMap({@required CourseModel courseModel}) {
+    List lessons = [];
+    courseModel.lessons.forEach((lesson) {
+      var less = LessonModel().toMap(lesson: lesson);
+      lessons.add(less);
+    });
+
+    var course = {
+      'title': courseModel.title,
+      'description': courseModel.description,
+      'organizationName': courseModel.organizationName,
+      'courseImageUrl': courseModel.courseImageUrl,
+      'lessons': lessons
+    };
+
+    return course;
   }
 }

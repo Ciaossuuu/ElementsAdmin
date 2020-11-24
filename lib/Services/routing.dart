@@ -1,4 +1,4 @@
-import 'package:elementsadmin/Screens/CoursesModule/courseBuilder.dart';
+import 'package:elementsadmin/Screens/CoursesModule/CreateCourse/courseBuilder.dart';
 import 'package:elementsadmin/Screens/CoursesModule/coursesModule.dart';
 import 'package:elementsadmin/Screens/Dashboard/dashboard.dart';
 import 'package:fluro/fluro.dart';

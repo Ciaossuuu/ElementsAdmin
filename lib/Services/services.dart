@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:elementsadmin/Models/courseModel.dart';
 import 'package:elementsadmin/Models/userModel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class DatabaseService {
   CollectionReference lesson = FirebaseFirestore.instance.collection('lessons');
@@ -67,17 +69,11 @@ class DatabaseService {
   }
 
   //add courses
-  Future<void> addCourses(DocumentSnapshot doc, title, description, lessons,
-      organizationName, courseImageUrl, subscribed) async {
+  Future<void> addCourses({@required CourseModel courseModel}) async {
+    var map = await CourseModel.toMap(courseModel: courseModel);
+    print(map.runtimeType);
     return courses
-        .add({
-          'title': title,
-          'description': description,
-          'organizationName': organizationName,
-          'lesson': lessons,
-          'courseImageURL': courseImageUrl,
-          'subscribed': subscribed
-        })
+        .add(map)
         .then((value) => print("Course Added"))
         .catchError((error) => print("Failed to add course: $error"));
   }
