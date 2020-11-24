@@ -143,6 +143,7 @@ class _CreateLessonState extends State<CreateLesson> {
         choice4Controller.text,
       ];
       lesson.choices = choices;
+      lesson.sequence = _learningProvider.lessons.length;
       lesson.correctAnswer = correctAnswerController.text;
 
       _learningProvider.addLesson(lesson: lesson);

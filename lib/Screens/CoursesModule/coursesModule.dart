@@ -121,14 +121,18 @@ class _CourseModuleState extends State<CoursesModule> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           MaterialButton(
-                            color: Colors.greenAccent[400],
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [Text('New Course'), Icon(Icons.add)],
-                            ),
-                            onPressed: () => Navigator.pushNamed(
-                                context, Routes.courseBuilder),
-                          ),
+                              color: Colors.greenAccent[400],
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [Text('New Course'), Icon(Icons.add)],
+                              ),
+                              onPressed: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (_) {
+                                  return CourseBuilder();
+                                }));
+                              }),
                           SizedBox()
                         ],
                       ),
@@ -237,91 +241,5 @@ class _CourseModuleState extends State<CoursesModule> {
             );
           }
         });
-  }
-
-  showAlertDialog(BuildContext context) {
-    // set up the button
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      contentPadding: EdgeInsets.all(0),
-      // title: Text("My title"),
-      content: CourseBuilder(),
-      actions: [],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
-  _addCourse(BuildContext context) {
-    showDialog<String>(
-      context: context,
-      child: Container(
-        child: AlertDialog(
-          contentPadding: const EdgeInsets.all(16.0),
-          title: Text('Add Course'),
-          content: Container(
-            width: size.width * .6,
-            height: size.height * .7,
-            child: SingleChildScrollView(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: <Widget>[
-                    TextFormField(
-                      decoration: InputDecoration(labelText: 'Course Title'),
-                      onChanged: (titles) {
-                        getTitle(titles);
-                      },
-                    ),
-                    TextFormField(
-                      decoration:
-                          InputDecoration(labelText: 'Course Description'),
-                      onChanged: (desc) {
-                        getDescription(desc);
-                      },
-                    ),
-                    TextFormField(
-                      decoration:
-                          InputDecoration(labelText: "Organization's Name"),
-                      onChanged: (org) {
-                        getOrganization(org);
-                      },
-                    ),
-                    TextFormField(
-                      decoration:
-                          InputDecoration(labelText: 'Course Image URL'),
-                      onChanged: (image) {
-                        getImageURL(image);
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          actions: <Widget>[
-            new FlatButton(
-                child: const Text('CANCEL'),
-                onPressed: () {
-                  Navigator.pop(context);
-                }),
-            new FlatButton(
-                child: const Text('ADD'),
-                onPressed: () {
-                  _formKey.currentState.validate();
-                  //DatabaseService().addLesson(sequence, title, description, videoUrl, imageUrl, question, choices, correctAnswer, izTaken);
-                  Navigator.pop(context);
-                }),
-          ],
-        ),
-      ),
-    );
   }
 }
