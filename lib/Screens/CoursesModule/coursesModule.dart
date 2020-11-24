@@ -17,156 +17,50 @@ class CoursesModule extends StatefulWidget {
 
 class _CourseModuleState extends State<CoursesModule> {
   Size size;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  DocumentSnapshot doc;
-  String uid, title, description, organizationName, courseImageUrl;
-  getTitle(titles) {
-    this.title = titles;
-  }
-
-  getImageURL(image) {
-    this.courseImageUrl = image;
-  }
-
-  getDescription(desc) {
-    this.description = desc;
-  }
-
-  getOrganization(org) {
-    this.organizationName = org;
-  }
 
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (_) {
+            return CourseBuilder();
+          }));
+        },
         child: Icon(Icons.add),
       ),
       body: Row(
         children: [
-          Container(
-            width: size.width * .2,
-            height: size.height,
-            decoration: BoxDecoration(color: Colors.white, boxShadow: [
-              BoxShadow(
-                spreadRadius: 1,
-                blurRadius: 2,
-                color: Colors.grey,
-                offset: Offset(2, 0),
-              ),
-            ]),
-            child: Padding(
-              padding: const EdgeInsets.only(top: 30.0),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          ' Elements++',
-                          style: TextStyle(
-                              fontFamily: 'IndieFlower',
-                              fontSize: 35,
-                              fontWeight: FontWeight.bold),
-                        )),
-                    SizedBox(height: size.height * 0.05),
-                    NavigationButton.buildButton(
-                        text: 'Dashboard',
-                        size: size,
-                        color: Colors.white,
-                        onpressed: () {
-                          Navigator.pushNamed(context, Routes.def);
-                        }),
-                    SizedBox(height: size.height * 0.02),
-                    NavigationButton.buildButton(
-                        text: 'Courses Module',
-                        size: size,
-                        color: Colors.deepPurple[400],
-                        onpressed: () {
-                          Navigator.pushNamed(context, Routes.courses);
-                        }),
-                    SizedBox(height: size.height * 0.02),
-                    NavigationButton.buildButton(
-                        text: 'Challenge Module',
-                        size: size,
-                        color: Colors.white,
-                        onpressed: () {
-                          Navigator.pushNamed(context, Routes.challenge);
-                        }),
-                    SizedBox(height: size.height * 0.02),
-                    NavigationButton.buildButton(
-                        text: 'Users',
-                        size: size,
-                        color: Colors.white,
-                        onpressed: () {
-                          Navigator.pushNamed(context, Routes.users);
-                        }),
-                  ]),
-            ),
+          NavigationBar(
+            navItem: 2,
           ),
-          Center(
-            child: Container(
-              width: size.width * .8,
-              height: size.height,
-              color: Colors.grey[300],
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 70, 20, 20),
-                child: Column(
-                  children: [
-                    Container(
-                      width: size.width * .7,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          MaterialButton(
-                              color: Colors.greenAccent[400],
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [Text('New Course'), Icon(Icons.add)],
-                              ),
-                              onPressed: () {
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (_) {
-                                  return CourseBuilder();
-                                }));
-                              }),
-                          SizedBox()
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: size.height * 0.05),
-                    Container(
-                      width: size.width * 0.7,
-                      color: Colors.white,
-                      child: StreamBuilder<QuerySnapshot>(
-                          stream: FirebaseFirestore.instance
-                              .collection('courses')
-                              .snapshots(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<QuerySnapshot> snapshot) {
-                            if (snapshot.hasData) {
-                              return SingleChildScrollView(
-                                child: ListView(
-                                    shrinkWrap: true,
-                                    children: snapshot.data.docs
-                                        .map<Widget>((doc) => _courseBuilder(
-                                              doc: doc,
-                                            ))
-                                        .toList()),
-                              );
-                            }
+          Container(
+            width: size.width * .8,
+            height: size.height,
+            color: Colors.white,
+            child: Padding(
+              padding: EdgeInsets.all(35),
+              child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('courses')
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView(
+                          shrinkWrap: true,
+                          children: snapshot.data.docs
+                              .map<Widget>((doc) => _courseBuilder(
+                                    doc: doc,
+                                  ))
+                              .toList());
+                    }
 
-                            return Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }),
-                    ),
-                  ],
-                ),
-              ),
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }),
             ),
           ),
         ],

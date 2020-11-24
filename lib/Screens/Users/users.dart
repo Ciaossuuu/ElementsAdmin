@@ -46,67 +46,7 @@ class _UsersState extends State<Users> {
       body: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            width: size.width * .2,
-            height: size.height,
-            decoration: BoxDecoration(color: Colors.white, boxShadow: [
-              BoxShadow(
-                spreadRadius: 1,
-                blurRadius: 2,
-                color: Colors.grey,
-                offset: Offset(2, 0),
-              )
-            ]),
-            child: Padding(
-              padding: const EdgeInsets.only(top: 30.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        ' Elements++',
-                        style: TextStyle(
-                            fontFamily: 'IndieFlower',
-                            fontSize: 35,
-                            fontWeight: FontWeight.bold),
-                      )),
-                  SizedBox(height: size.height * 0.05),
-                  NavigationButton.buildButton(
-                      text: 'Dashboard',
-                      size: size,
-                      color: Colors.white,
-                      onpressed: () {
-                        Navigator.pushNamed(context, Routes.def);
-                      }),
-                  SizedBox(height: size.height * 0.02),
-                  NavigationButton.buildButton(
-                      text: 'Courses Module',
-                      size: size,
-                      color: Colors.white,
-                      onpressed: () {
-                        Navigator.pushNamed(context, Routes.courses);
-                      }),
-                  SizedBox(height: size.height * 0.02),
-                  NavigationButton.buildButton(
-                      text: 'Challenge Module',
-                      size: size,
-                      color: Colors.white,
-                      onpressed: () {
-                        Navigator.pushNamed(context, Routes.challenge);
-                      }),
-                  SizedBox(height: size.height * 0.02),
-                  NavigationButton.buildButton(
-                      text: 'Users',
-                      size: size,
-                      color: Colors.deepPurple[400],
-                      onpressed: () {
-                        Navigator.pushNamed(context, Routes.users);
-                      }),
-                ],
-              ),
-            ),
-          ),
+          NavigationBar(navItem: 4),
           Center(
             child: Container(
               width: size.width * .8,
