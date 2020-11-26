@@ -30,7 +30,7 @@ class LessonModel {
       'title': lesson.title,
       'sequence': lesson.sequence,
       'description': lesson.description,
-      'videoUrl': lesson.videoUrl,
+      'url': lesson.videoUrl,
       'imageUrl': lesson.imageUrl,
       'izTaken': false,
       'question': lesson.question,
