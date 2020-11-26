@@ -78,15 +78,17 @@ class DatabaseService {
       print('course added');
       //update now !
       await courses.doc(value.id).update({'ref': value.id}).then((value) async {
-        await FirebaseFirestore.instance
-            .collection('users')
-            .get()
-            .then((value) {
-          value.docs.forEach((user) {
-            addCourseToUser(map: map, uid: user.id);
-          });
-        });
-      });
+        print('updated');
+        // await FirebaseFirestore.instance
+        //     .collection('users')
+        //     .get()
+        //     .then((value) {
+        //   value.docs.forEach((user) {
+        //     addCourseToUser(map: map, uid: user.id);
+        //   });
+        // });
+      }).catchError((error) => print("Failed to update: $error"));
+      ;
     }).catchError((error) => print("Failed to add course: $error"));
 
     // .then((value) async {
