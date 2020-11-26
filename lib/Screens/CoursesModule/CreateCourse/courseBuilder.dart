@@ -137,6 +137,7 @@ class _CourseBuilderState extends State<CourseBuilder> {
                         course.organizationName = organizationName.text;
                         course.courseImageUrl = coureImageUrl.text;
                         course.lessons = _learningProvider.lessons;
+
                         DatabaseService()
                             .addCourses(courseModel: course)
                             .then((value) {

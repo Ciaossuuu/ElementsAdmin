@@ -38,7 +38,8 @@ class CourseModel {
       'description': courseModel.description,
       'organizationName': courseModel.organizationName,
       'courseImageUrl': courseModel.courseImageUrl,
-      'lessons': lessons
+      'lessons': lessons,
+      'subscribed': false
     };
 
     return course;
