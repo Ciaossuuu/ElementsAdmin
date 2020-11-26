@@ -77,23 +77,24 @@ class DatabaseService {
     return courses.add(map).then((value) async {
       print('course added');
       //update now !
-      await courses.doc(value.id).update({'ref': value.id}).then((value) async {
-        print('updated');
-        // await FirebaseFirestore.instance
-        //     .collection('users')
-        //     .get()
-        //     .then((value) {
-        //   value.docs.forEach((user) {
-        //     addCourseToUser(map: map, uid: user.id);
-        //   });
-        // });
-      }).catchError((error) => print("Failed to update: $error"));
-      ;
+      await courses
+          .doc(value.id)
+          .update({'ref': value.id})
+          .then((value) async {
+            print('updated');
+          })
+          .then((value) => addThing(map))
+          .catchError((error) => print("Failed to update: $error"))
+          .catchError((error) => print("Failed to update: $error"));
     }).catchError((error) => print("Failed to add course: $error"));
+  }
 
-    // .then((value) async {
-
-    // });
+  addThing(map) async {
+    await FirebaseFirestore.instance.collection('users').get().then((value) {
+      value.docs.forEach((user) {
+        addCourseToUser(map: map, uid: user.id);
+      });
+    });
   }
 
   void addCourseToUser({String uid, map}) async {
