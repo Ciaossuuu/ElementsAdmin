@@ -14,6 +14,7 @@ class _QuizBuilderState extends State<QuizBuilder> {
       organizationName = TextEditingController(),
       coureImageUrl = TextEditingController();
   QuestionProvider questionProvider;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   List quizzes;
   Size size;
   @override
@@ -23,7 +24,7 @@ class _QuizBuilderState extends State<QuizBuilder> {
     this.quizzes = questionProvider.quizzes;
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => _addDialog(context),
         child: Center(child: Text('Add')),
       ),
       backgroundColor: Colors.white,
@@ -104,7 +105,6 @@ class _QuizBuilderState extends State<QuizBuilder> {
                   buildQuestions(),
                 ],
               ),
-              SizedBox(height: size.height * 0.05),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -135,7 +135,7 @@ class _QuizBuilderState extends State<QuizBuilder> {
   buildQuestions() {
     return Container(
       width: size.width * 0.4,
-      height: size.height * 0.62,
+      height: size.height * 0.5,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -151,14 +151,14 @@ class _QuizBuilderState extends State<QuizBuilder> {
                     style: CustomTextStyles.customText(
                         isBold: true, size: FontSizes.subHeading),
                   ),
-                  MaterialButton(
-                    color: Colors.green,
-                    child: Text('Add Question',
-                        style: TextStyle(
-                          color: Colors.white,
-                        )),
-                    onPressed: () {},
-                  )
+                  // MaterialButton(
+                  //   color: Colors.green,
+                  //   child: Text('Add Question',
+                  //       style: TextStyle(
+                  //         color: Colors.white,
+                  //       )),
+                  //   onPressed: () {},
+                  // )
                 ],
               ),
             ),
@@ -179,8 +179,8 @@ class _QuizBuilderState extends State<QuizBuilder> {
   _buildQuestion(index) {
     return Card(
       child: ListTile(
-        title: Text('Question: What am I?'),
-        subtitle: Text('Correct Answer: stupid'),
+        title: Text('What is the molecular formula of Propane?'),
+        subtitle: Text('C3H8'),
         leading: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -202,6 +202,91 @@ class _QuizBuilderState extends State<QuizBuilder> {
           labelStyle: CustomTextStyles.customText(size: FontSizes.medium),
           border: new OutlineInputBorder(
               borderRadius: new BorderRadius.circular(5.0))),
+    );
+  }
+
+  _addDialog(BuildContext context) {
+    showDialog<String>(
+      context: context,
+      child: Container(
+        child: AlertDialog(
+          contentPadding: const EdgeInsets.all(16.0),
+          title: Text('Add a question'),
+          content: Container(
+            width: size.width * .6,
+            height: size.height * .4,
+            child: SingleChildScrollView(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: <Widget>[
+                    TextFormField(
+                      decoration: InputDecoration(labelText: 'Question'),
+                      onChanged: (String question) {},
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: size.width * .1,
+                          child: TextFormField(
+                            decoration: InputDecoration(labelText: 'Choice 1'),
+                            validator: (value) {},
+                          ),
+                        ),
+                        SizedBox(width: size.width * 0.02),
+                        Container(
+                          width: size.width * .1,
+                          child: TextFormField(
+                            decoration: InputDecoration(labelText: 'Choice 2'),
+                            validator: (value) {},
+                          ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: size.width * .1,
+                          child: TextFormField(
+                            decoration: InputDecoration(labelText: 'Choice 3'),
+                            validator: (value) {},
+                          ),
+                        ),
+                        SizedBox(width: size.width * 0.02),
+                        Container(
+                          width: size.width * .1,
+                          child: TextFormField(
+                            decoration: InputDecoration(labelText: 'Choice 4'),
+                            validator: (value) {},
+                          ),
+                        )
+                      ],
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(labelText: 'Correct Answer'),
+                      onChanged: (String correctAnswer) {},
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+                child: const Text('CANCEL'),
+                onPressed: () {
+                  Navigator.pop(context);
+                }),
+            new FlatButton(
+                child: const Text('ADD'),
+                onPressed: () {
+                  _formKey.currentState.validate();
+
+                  Navigator.pop(context);
+                }),
+          ],
+        ),
+      ),
     );
   }
 }

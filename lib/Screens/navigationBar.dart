@@ -73,7 +73,7 @@ class _NavigationBarState extends State<NavigationBar> {
               SizedBox(height: size.height * .02),
               _buildButton(
                   izSelected: item2,
-                  text: 'Courses Module',
+                  text: 'Learning Module',
                   color: Colors.purple,
                   size: size,
                   onpressed: () {
