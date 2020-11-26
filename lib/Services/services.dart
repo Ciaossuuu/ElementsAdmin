@@ -74,17 +74,24 @@ class DatabaseService {
   Future<void> addCourses({@required CourseModel courseModel}) async {
     var map = await CourseModel.toMap(courseModel: courseModel);
     print(map.runtimeType);
-    return courses
-        .add(map)
-        .then((value) => print("Course Added"))
-        .catchError((error) => print("Failed to add course: $error"))
-        .then((value) async {
-      await FirebaseFirestore.instance.collection('users').get().then((value) {
-        value.docs.forEach((user) {
-          addCourseToUser(map: map, uid: user.id);
+    return courses.add(map).then((value) async {
+      print('course added');
+      //update now !
+      await courses.doc(value.id).update({'ref': value.id}).then((value) async {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .get()
+            .then((value) {
+          value.docs.forEach((user) {
+            addCourseToUser(map: map, uid: user.id);
+          });
         });
       });
-    });
+    }).catchError((error) => print("Failed to add course: $error"));
+
+    // .then((value) async {
+
+    // });
   }
 
   void addCourseToUser({String uid, map}) async {
