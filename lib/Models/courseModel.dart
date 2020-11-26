@@ -9,6 +9,7 @@ class CourseModel {
   String courseImageUrl;
   bool subscribed;
   String ref;
+
   // List<String,LessonModel> lessons;
   List<LessonModel> lessons = [];
   CourseModel.getData({DocumentSnapshot doc}) {
@@ -40,7 +41,9 @@ class CourseModel {
       'organizationName': courseModel.organizationName,
       'courseImageUrl': courseModel.courseImageUrl,
       'lessons': lessons,
-      'subscribed': false
+      'subscribed': false,
+      'izUpdated': true,
+      'score': 0
     };
 
     return course;
