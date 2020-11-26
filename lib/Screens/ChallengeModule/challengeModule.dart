@@ -48,30 +48,39 @@ class _ChallengeModuleState extends State<ChallengeModule> {
             width: size.width * .8,
             height: size.height,
             color: Colors.white,
-            child: Padding(
-              padding: EdgeInsets.all(35),
-              child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('quizzes')
-                      .snapshots(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.hasData) {
-                      return Scrollbar(
-                        child: ListView(
-                            shrinkWrap: true,
-                            children: snapshot.data.docs
-                                .map<Widget>((doc) => _quizBuilder(
-                                      doc: doc,
-                                    ))
-                                .toList()),
-                      );
-                    }
+            padding: EdgeInsets.all(35),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Quizzes',
+                    style:
+                        TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                Padding(
+                  padding: EdgeInsets.all(35),
+                  child: StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('quizzes')
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (snapshot.hasData) {
+                          return Scrollbar(
+                            child: ListView(
+                                shrinkWrap: true,
+                                children: snapshot.data.docs
+                                    .map<Widget>((doc) => _quizBuilder(
+                                          doc: doc,
+                                        ))
+                                    .toList()),
+                          );
+                        }
 
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }),
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }),
+                ),
+              ],
             ),
           ),
         ],
@@ -94,18 +103,20 @@ class _ChallengeModuleState extends State<ChallengeModule> {
         } else {
           return Column(
             children: [
-              Container(
-                child:
-                    ExpansionTile(title: Text(quiz.level), children: <Widget>[
-                  ListTile(
-                    title: Column(
-                      children: [
-                        SizedBox(height: size.height * 0.02),
-                        Text('${quiz.score}'),
-                      ],
+              Card(
+                child: Container(
+                  child:
+                      ExpansionTile(title: Text(quiz.title), children: <Widget>[
+                    ListTile(
+                      title: Column(
+                        children: [
+                          SizedBox(height: size.height * 0.02),
+                          Text(quiz.level),
+                        ],
+                      ),
                     ),
-                  ),
-                ]),
+                  ]),
+                ),
               )
             ],
           );

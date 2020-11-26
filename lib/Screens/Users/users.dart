@@ -51,7 +51,6 @@ class _UsersState extends State<Users> {
             child: Container(
               width: size.width * .8,
               height: size.height,
-              color: Colors.grey[300],
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 70, 20, 20),
                 child: Column(

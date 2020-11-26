@@ -39,30 +39,41 @@ class _CourseModuleState extends State<CoursesModule> {
             width: size.width * .8,
             height: size.height,
             color: Colors.white,
-            child: Padding(
-              padding: EdgeInsets.all(35),
-              child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('courses')
-                      .snapshots(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.hasData) {
-                      return Scrollbar(
-                        child: ListView(
-                            shrinkWrap: true,
-                            children: snapshot.data.docs
-                                .map<Widget>((doc) => _courseBuilder(
-                                      doc: doc,
-                                    ))
-                                .toList()),
-                      );
-                    }
+            padding: EdgeInsets.all(35),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Courses',
+                    style:
+                        TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                Padding(
+                  padding: EdgeInsets.all(35),
+                  child: StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('courses')
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (snapshot.hasData) {
+                          return Scrollbar(
+                            child: SingleChildScrollView(
+                              child: ListView(
+                                  shrinkWrap: true,
+                                  children: snapshot.data.docs
+                                      .map<Widget>((doc) => _courseBuilder(
+                                            doc: doc,
+                                          ))
+                                      .toList()),
+                            ),
+                          );
+                        }
 
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }),
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }),
+                ),
+              ],
             ),
           ),
         ],
@@ -86,48 +97,50 @@ class _CourseModuleState extends State<CoursesModule> {
           } else {
             return Column(
               children: [
-                Container(
-                  child: ExpansionTile(
-                    title: Text(course.title),
-                    children: <Widget>[
-                      ListTile(
-                        title: Column(
-                          children: [
-                            Container(
-                              width: size.width * 0.2,
-                              child: Image(
-                                  image: NetworkImage(course.courseImageUrl)),
-                            ),
-                            SizedBox(height: size.height * 0.02),
-                            Text(course.description),
-                          ],
+                Card(
+                  child: Container(
+                    child: ExpansionTile(
+                      title: Text(course.title),
+                      children: <Widget>[
+                        ListTile(
+                          title: Column(
+                            children: [
+                              Container(
+                                width: size.width * 0.2,
+                                child: Image(
+                                    image: NetworkImage(course.courseImageUrl)),
+                              ),
+                              SizedBox(height: size.height * 0.02),
+                              Text(course.description),
+                            ],
+                          ),
                         ),
-                      ),
-                      ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            // MaterialButton(
-                            //   color: Colors.blue,
-                            //   child: Text('View'),
-                            //   onPressed: () {},
-                            // ),
-                            // SizedBox(width: size.width * 0.01),
-                            // MaterialButton(
-                            //   color: Colors.yellow,
-                            //   child: Text('Edit'),
-                            //   onPressed: () {},
-                            // ),
-                            // SizedBox(width: size.width * 0.01),
-                            // MaterialButton(
-                            //   color: Colors.red,
-                            //   child: Text('Delete'),
-                            //   onPressed: () {},
-                            // ),
-                          ],
-                        ),
-                      )
-                    ],
+                        ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              // MaterialButton(
+                              //   color: Colors.blue,
+                              //   child: Text('View'),
+                              //   onPressed: () {},
+                              // ),
+                              // SizedBox(width: size.width * 0.01),
+                              // MaterialButton(
+                              //   color: Colors.yellow,
+                              //   child: Text('Edit'),
+                              //   onPressed: () {},
+                              // ),
+                              // SizedBox(width: size.width * 0.01),
+                              // MaterialButton(
+                              //   color: Colors.red,
+                              //   child: Text('Delete'),
+                              //   onPressed: () {},
+                              // ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(
