@@ -8,6 +8,7 @@ class CourseModel {
   String organizationName;
   String courseImageUrl;
   bool subscribed;
+  String ref;
   // List<String,LessonModel> lessons;
   List<LessonModel> lessons = [];
   CourseModel.getData({DocumentSnapshot doc}) {
@@ -40,6 +41,26 @@ class CourseModel {
       'courseImageUrl': courseModel.courseImageUrl,
       'lessons': lessons,
       'subscribed': false
+    };
+
+    return course;
+  }
+
+  static addRef({@required CourseModel courseModel, @required String ref}) {
+    List lessons = [];
+    courseModel.lessons.forEach((lesson) {
+      var less = LessonModel().toMap(lesson: lesson);
+      lessons.add(less);
+    });
+
+    var course = {
+      'title': courseModel.title,
+      'description': courseModel.description,
+      'organizationName': courseModel.organizationName,
+      'courseImageUrl': courseModel.courseImageUrl,
+      'lessons': lessons,
+      'subscribed': false,
+      'ref': ref
     };
 
     return course;

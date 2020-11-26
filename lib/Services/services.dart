@@ -77,13 +77,18 @@ class DatabaseService {
     return courses.add(map).then((value) async {
       print('course added');
       //update now !
+      var id = value.id;
       await courses
           .doc(value.id)
           .update({'ref': value.id})
           .then((value) async {
             print('updated');
           })
-          .then((value) => addThing(map))
+          .then((value) async {
+            var map2 =
+                await CourseModel.addRef(courseModel: courseModel, ref: id);
+            addThing(map2);
+          })
           .catchError((error) => print("Failed to update: $error"))
           .catchError((error) => print("Failed to update: $error"));
     }).catchError((error) => print("Failed to add course: $error"));
