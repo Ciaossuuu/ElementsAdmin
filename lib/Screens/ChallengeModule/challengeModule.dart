@@ -40,47 +40,61 @@ class _ChallengeModuleState extends State<ChallengeModule> {
         child: Icon(Icons.add),
       ),
       body: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          NavigationBar(
-            navItem: 3,
-          ),
-          Container(
-            width: size.width * .8,
-            height: size.height,
-            color: Colors.white,
-            padding: EdgeInsets.all(35),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Quizzes',
-                    style:
-                        TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                Padding(
-                  padding: EdgeInsets.all(35),
-                  child: StreamBuilder<QuerySnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection('quizzes')
-                          .snapshots(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (snapshot.hasData) {
-                          return Scrollbar(
-                            child: ListView(
-                                shrinkWrap: true,
-                                children: snapshot.data.docs
-                                    .map<Widget>((doc) => _quizBuilder(
-                                          doc: doc,
-                                        ))
-                                    .toList()),
-                          );
-                        }
-
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }),
+          NavigationBar(navItem: 3),
+          Center(
+            child: Container(
+              width: size.width * .8,
+              height: size.height,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 70, 20, 20),
+                child: Column(
+                  children: [
+                    Container(
+                      width: size.width * .7,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Quizzes',
+                            style: CustomTextStyles.customText(
+                                size: FontSizes.heading, isBold: true),
+                          ),
+                          SizedBox()
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: size.height * 0.05),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Container(
+                          width: size.width * 0.7,
+                          child: StreamBuilder(
+                              stream: FirebaseFirestore.instance
+                                  .collection('quizzes')
+                                  .snapshots(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                                if (snapshot.hasData) {
+                                  return SingleChildScrollView(
+                                      child: Scrollbar(
+                                          child: ListView(
+                                              shrinkWrap: true,
+                                              children: snapshot.data.docs
+                                                  .map<Widget>(
+                                                      (doc) => _quizBuilder(
+                                                            doc: doc,
+                                                          ))
+                                                  .toList())));
+                                }
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              })),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ],
@@ -95,10 +109,7 @@ class _ChallengeModuleState extends State<ChallengeModule> {
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
-            child: SizedBox(
-              height: 210.0,
-              width: 200.0,
-            ),
+            child: SizedBox(),
           );
         } else {
           return Column(

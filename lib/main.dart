@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
           onGenerateRoute: FluroRouter.router.generator,
           debugShowCheckedModeBanner: false,
-          initialRoute: '/courses',
+          initialRoute: '/',
           title: 'Elements++ Admin',
           theme: ThemeData(
             primarySwatch: Colors.blue,

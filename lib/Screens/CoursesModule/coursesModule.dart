@@ -5,6 +5,7 @@ import 'package:elementsadmin/Screens/elementsAppBar.dart';
 import 'package:elementsadmin/Screens/navigationBar.dart';
 import 'package:elementsadmin/Services/services.dart';
 import 'package:elementsadmin/Strings/routes.dart';
+import 'package:elementsadmin/Strings/textStyles.dart';
 
 import 'package:flutter/material.dart';
 
@@ -31,49 +32,61 @@ class _CourseModuleState extends State<CoursesModule> {
         child: Icon(Icons.add),
       ),
       body: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          NavigationBar(
-            navItem: 2,
-          ),
-          Container(
-            width: size.width * .8,
-            height: size.height,
-            color: Colors.white,
-            padding: EdgeInsets.all(35),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Courses',
-                    style:
-                        TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                Padding(
-                  padding: EdgeInsets.all(35),
-                  child: StreamBuilder<QuerySnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection('courses')
-                          .snapshots(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (snapshot.hasData) {
-                          return Scrollbar(
-                            child: SingleChildScrollView(
-                              child: ListView(
-                                  shrinkWrap: true,
-                                  children: snapshot.data.docs
-                                      .map<Widget>((doc) => _courseBuilder(
-                                            doc: doc,
-                                          ))
-                                      .toList()),
-                            ),
-                          );
-                        }
-
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }),
+          NavigationBar(navItem: 2),
+          Center(
+            child: Container(
+              width: size.width * .8,
+              height: size.height,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 70, 20, 20),
+                child: Column(
+                  children: [
+                    Container(
+                      width: size.width * .7,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Courses',
+                            style: CustomTextStyles.customText(
+                                size: FontSizes.heading, isBold: true),
+                          ),
+                          SizedBox()
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: size.height * 0.05),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Container(
+                          width: size.width * 0.7,
+                          child: StreamBuilder(
+                              stream: FirebaseFirestore.instance
+                                  .collection('courses')
+                                  .snapshots(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                                if (snapshot.hasData) {
+                                  return SingleChildScrollView(
+                                      child: Scrollbar(
+                                          child: ListView(
+                                              shrinkWrap: true,
+                                              children: snapshot.data.docs
+                                                  .map<Widget>(
+                                                      (doc) => _courseBuilder(
+                                                            doc: doc,
+                                                          ))
+                                                  .toList())));
+                                }
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              })),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ],
@@ -89,10 +102,7 @@ class _CourseModuleState extends State<CoursesModule> {
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
-              child: SizedBox(
-                height: 210.0,
-                width: 200.0,
-              ),
+              child: SizedBox(),
             );
           } else {
             return Column(
