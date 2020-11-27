@@ -34,6 +34,7 @@ class LessonModel {
       'imageUrl': lesson.imageUrl,
       'izTaken': false,
       'question': lesson.question,
+      'izUpdated': false,
       'correctAnswer': lesson.correctAnswer,
       'choices': lesson.choices
     };

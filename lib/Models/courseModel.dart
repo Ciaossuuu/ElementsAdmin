@@ -42,7 +42,6 @@ class CourseModel {
       'courseImageUrl': courseModel.courseImageUrl,
       'lessons': lessons,
       'subscribed': false,
-      'izUpdated': true,
       'score': 0
     };
 
@@ -63,6 +62,7 @@ class CourseModel {
       'courseImageUrl': courseModel.courseImageUrl,
       'lessons': lessons,
       'subscribed': false,
+      'score': 0,
       'ref': ref
     };
 
