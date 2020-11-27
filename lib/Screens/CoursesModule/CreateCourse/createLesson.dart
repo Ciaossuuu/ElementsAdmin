@@ -30,12 +30,12 @@ class _CreateLessonState extends State<CreateLesson> {
     return AlertDialog(
       contentPadding: const EdgeInsets.all(16.0),
       title: Text('Add Lesson'),
-      content: Container(
-        width: size.width * .6,
-        height: size.height * .7,
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKeyLesson,
+      content: Form(
+        key: _formKeyLesson,
+        child: Container(
+          width: size.width * .6,
+          height: size.height * .7,
+          child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -104,7 +104,10 @@ class _CreateLessonState extends State<CreateLesson> {
               child: Text('ADD'),
             ),
             onPressed: () {
-              _formKeyLesson.currentState.validate();
+              if (_formKeyLesson.currentState.validate()) {
+                Navigator.pop(context);
+              }
+
               _addLesson();
             })
       ],
@@ -116,7 +119,7 @@ class _CreateLessonState extends State<CreateLesson> {
     return TextFormField(
       controller: controller,
       validator: (value) {
-        if (value == null) {
+        if (value.length == 0) {
           return 'Should not be empty';
         }
         return null;
@@ -144,6 +147,5 @@ class _CreateLessonState extends State<CreateLesson> {
     lesson.correctAnswer = correctAnswerController.text;
 
     _learningProvider.addLesson(lesson: lesson);
-    Navigator.pop(context);
   }
 }

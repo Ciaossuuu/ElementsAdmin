@@ -14,7 +14,8 @@ class _QuizBuilderState extends State<QuizBuilder> {
       organizationName = TextEditingController(),
       coureImageUrl = TextEditingController();
   QuestionProvider questionProvider;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKeyQuiz = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKeyQuestion = GlobalKey<FormState>();
   List quizzes;
   Size size;
   @override
@@ -65,6 +66,7 @@ class _QuizBuilderState extends State<QuizBuilder> {
                       child: Padding(
                         padding: const EdgeInsets.all(25),
                         child: Form(
+                          key: _formKeyQuiz,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -122,7 +124,9 @@ class _QuizBuilderState extends State<QuizBuilder> {
                       child: Text('SAVE',
                           style: CustomTextStyles.customText(
                               isBold: true, size: FontSizes.small)),
-                      onPressed: () {}),
+                      onPressed: () {
+                        _formKeyQuiz.currentState.validate();
+                      }),
                 ],
               )
             ],
@@ -202,6 +206,12 @@ class _QuizBuilderState extends State<QuizBuilder> {
           labelStyle: CustomTextStyles.customText(size: FontSizes.medium),
           border: new OutlineInputBorder(
               borderRadius: new BorderRadius.circular(5.0))),
+      validator: (value) {
+        if (value.length == 0) {
+          return 'Should not be empty';
+        }
+        return null;
+      },
     );
   }
 
@@ -217,12 +227,18 @@ class _QuizBuilderState extends State<QuizBuilder> {
             height: size.height * .4,
             child: SingleChildScrollView(
               child: Form(
-                key: _formKey,
+                key: _formKeyQuestion,
                 child: Column(
                   children: <Widget>[
                     TextFormField(
                       decoration: InputDecoration(labelText: 'Question'),
                       onChanged: (String question) {},
+                      validator: (value) {
+                        if (value.length == 0) {
+                          return 'Should not be empty';
+                        }
+                        return null;
+                      },
                     ),
                     Row(
                       children: [
@@ -230,7 +246,12 @@ class _QuizBuilderState extends State<QuizBuilder> {
                           width: size.width * .1,
                           child: TextFormField(
                             decoration: InputDecoration(labelText: 'Choice 1'),
-                            validator: (value) {},
+                            validator: (value) {
+                              if (value.length == 0) {
+                                return 'Should not be empty';
+                              }
+                              return null;
+                            },
                           ),
                         ),
                         SizedBox(width: size.width * 0.02),
@@ -238,7 +259,12 @@ class _QuizBuilderState extends State<QuizBuilder> {
                           width: size.width * .1,
                           child: TextFormField(
                             decoration: InputDecoration(labelText: 'Choice 2'),
-                            validator: (value) {},
+                            validator: (value) {
+                              if (value.length == 0) {
+                                return 'Should not be empty';
+                              }
+                              return null;
+                            },
                           ),
                         )
                       ],
@@ -249,7 +275,12 @@ class _QuizBuilderState extends State<QuizBuilder> {
                           width: size.width * .1,
                           child: TextFormField(
                             decoration: InputDecoration(labelText: 'Choice 3'),
-                            validator: (value) {},
+                            validator: (value) {
+                              if (value.length == 0) {
+                                return 'Should not be empty';
+                              }
+                              return null;
+                            },
                           ),
                         ),
                         SizedBox(width: size.width * 0.02),
@@ -257,7 +288,12 @@ class _QuizBuilderState extends State<QuizBuilder> {
                           width: size.width * .1,
                           child: TextFormField(
                             decoration: InputDecoration(labelText: 'Choice 4'),
-                            validator: (value) {},
+                            validator: (value) {
+                              if (value.length == 0) {
+                                return 'Should not be empty';
+                              }
+                              return null;
+                            },
                           ),
                         )
                       ],
@@ -265,6 +301,12 @@ class _QuizBuilderState extends State<QuizBuilder> {
                     TextFormField(
                       decoration: InputDecoration(labelText: 'Correct Answer'),
                       onChanged: (String correctAnswer) {},
+                      validator: (value) {
+                        if (value.length == 0) {
+                          return 'Should not be empty';
+                        }
+                        return null;
+                      },
                     ),
                   ],
                 ),
@@ -280,9 +322,9 @@ class _QuizBuilderState extends State<QuizBuilder> {
             new FlatButton(
                 child: const Text('ADD'),
                 onPressed: () {
-                  _formKey.currentState.validate();
-
-                  Navigator.pop(context);
+                  if (_formKeyQuestion.currentState.validate()) {
+                    Navigator.pop(context);
+                  }
                 }),
           ],
         ),

@@ -20,6 +20,7 @@ class CourseBuilder extends StatefulWidget {
 }
 
 class _CourseBuilderState extends State<CourseBuilder> {
+  final _formKeyCourse = GlobalKey<FormState>();
   Size size;
   LearningProvider _learningProvider;
   TextEditingController title = TextEditingController(),
@@ -78,6 +79,7 @@ class _CourseBuilderState extends State<CourseBuilder> {
                       child: Padding(
                         padding: const EdgeInsets.all(25),
                         child: Form(
+                          key: _formKeyCourse,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -130,6 +132,7 @@ class _CourseBuilderState extends State<CourseBuilder> {
                         style: CustomTextStyles.customText(
                             isBold: true, size: FontSizes.small)),
                     onPressed: () {
+                      _formKeyCourse.currentState.validate();
                       if (title.text != '') {
                         CourseModel course = CourseModel();
                         course.title = title.text;
@@ -147,7 +150,7 @@ class _CourseBuilderState extends State<CourseBuilder> {
                             title: 'Success',
                           );
                         });
-                        Future.delayed(Duration(seconds: 2), () {
+                        Future.delayed(Duration(milliseconds: 2500), () {
                           Navigator.pop(context);
                           Navigator.pop(context);
                         });
@@ -180,6 +183,12 @@ class _CourseBuilderState extends State<CourseBuilder> {
           labelStyle: CustomTextStyles.customText(size: FontSizes.medium),
           border: new OutlineInputBorder(
               borderRadius: new BorderRadius.circular(5.0))),
+      validator: (value) {
+        if (value.length == 0) {
+          return 'Should not be empty';
+        }
+        return null;
+      },
     );
   }
 
