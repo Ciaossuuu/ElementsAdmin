@@ -1,11 +1,12 @@
+import 'package:elementsadmin/Models/questionModel.dart';
 import 'package:elementsadmin/Models/quizModel.dart';
 import 'package:flutter/material.dart';
 
 class QuestionProvider extends ChangeNotifier {
-  List<QuizModel> quizzes = [];
+  List<QuestionModel> questions = [];
 
-  void addLesson({@required QuizModel quiz}) {
-    this.quizzes.add(quiz);
+  void addQuestion({@required QuestionModel question}) {
+    this.questions.add(question);
     notifyListeners();
   }
 }

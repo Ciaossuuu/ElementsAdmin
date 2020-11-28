@@ -33,14 +33,14 @@ class _CourseBuilderState extends State<CourseBuilder> {
     _learningProvider = Provider.of<LearningProvider>(context, listen: true);
     size = MediaQuery.of(context).size;
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          var baseDialog = CreateLesson();
-          showDialog(
-              context: context, builder: (BuildContext context) => baseDialog);
-        },
-        child: Center(child: Text('Add')),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     var baseDialog = CreateLesson();
+      //     showDialog(
+      //         context: context, builder: (BuildContext context) => baseDialog);
+      //   },
+      //   child: Center(child: Text('Add')),
+      // ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(

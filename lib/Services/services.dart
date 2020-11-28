@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elementsadmin/Models/courseModel.dart';
+import 'package:elementsadmin/Models/quizModel.dart';
 import 'package:elementsadmin/Models/userModel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -70,6 +71,15 @@ class DatabaseService {
         .catchError((error) => print("Failed to delete lesson: $error"));
   }
 
+  Future<void> addQuizzes({@required QuizModel quizModel}) async {
+    var map = await QuizModel.toMap(quizModel: quizModel);
+    print(map.runtimeType);
+    return quizzes
+        .add(map)
+        .then((value) => print("Quiz Added"))
+        .catchError((error) => print("Failed to add quiz: $error"));
+  }
+
   //add courses
   Future<void> addCourses({@required CourseModel courseModel}) async {
     var map = await CourseModel.toMap(courseModel: courseModel);
@@ -132,17 +142,6 @@ class DatabaseService {
             .then((value) => print("User's Course Added"))
             .catchError((error) => print("Failed to add course: $error"));
       });
-    });
-  }
-
-  Future<void> addQuizzes(DocumentSnapshot doc, String title, String level,
-      int score, bool isTaken, List questions) async {
-    return quizzes.doc(doc.id).set({
-      'title': title,
-      'level': level,
-      'score': score,
-      'isTaken': isTaken,
-      'questions': questions,
     });
   }
 }

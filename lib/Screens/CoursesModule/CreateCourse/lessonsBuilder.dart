@@ -1,5 +1,6 @@
 import 'package:elementsadmin/Models/lessonModel.dart';
 import 'package:elementsadmin/Provider/learningProvider.dart';
+import 'package:elementsadmin/Screens/CoursesModule/CreateCourse/createLesson.dart';
 import 'package:elementsadmin/Services/services.dart';
 import 'package:elementsadmin/Strings/textStyles.dart';
 import 'package:flutter/material.dart';
@@ -44,26 +45,36 @@ class _LessonBuilderState extends State<LessonBuilder> {
             child: Padding(
               padding: EdgeInsets.all(25),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Lessons",
                     style: CustomTextStyles.customText(
                         isBold: true, size: FontSizes.subHeading),
                   ),
+                  MaterialButton(
+                      padding: EdgeInsets.all(15),
+                      color: Colors.green,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Icon(Icons.add, color: Colors.white),
+                          Text('Add',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ))
+                        ],
+                      ),
+                      onPressed: () {
+                        var baseDialog = CreateLesson();
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) => baseDialog);
+                      }),
                 ],
               ),
             ),
           ),
-          // Container(
-          //   child: MaterialButton(
-          //     color: Colors.greenAccent[400],
-          //     child: Row(
-          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //       children: [Text('Add new Lesson'), Icon(Icons.add)],
-          //     ),
-          //     onPressed: () => _addLesson(context),
-          //   ),
-          // ),
           Expanded(
             child: ListView.builder(
               itemCount: lessons.length,
@@ -90,11 +101,5 @@ class _LessonBuilderState extends State<LessonBuilder> {
         ),
       ),
     );
-  }
-
-  _addLesson(BuildContext context) {
-    bool dropdownValue = false;
-    LessonModel lesson = LessonModel();
-    //TextEditingController question = TextEditingController();
   }
 }

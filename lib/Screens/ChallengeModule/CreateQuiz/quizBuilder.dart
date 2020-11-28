@@ -1,4 +1,9 @@
+import 'package:elementsadmin/Models/questionModel.dart';
+import 'package:elementsadmin/Models/quizModel.dart';
 import 'package:elementsadmin/Provider/questionProvider.dart';
+import 'package:elementsadmin/Screens/ChallengeModule/CreateQuiz/createQuestion.dart';
+import 'package:elementsadmin/Screens/ChallengeModule/CreateQuiz/questionBuilder.dart';
+import 'package:elementsadmin/Services/services.dart';
 import 'package:elementsadmin/Strings/textStyles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,25 +14,17 @@ class QuizBuilder extends StatefulWidget {
 }
 
 class _QuizBuilderState extends State<QuizBuilder> {
-  TextEditingController title = TextEditingController(),
-      description = TextEditingController(),
-      organizationName = TextEditingController(),
-      coureImageUrl = TextEditingController();
-  QuestionProvider questionProvider;
   final GlobalKey<FormState> _formKeyQuiz = GlobalKey<FormState>();
-  final GlobalKey<FormState> _formKeyQuestion = GlobalKey<FormState>();
-  List quizzes;
+  TextEditingController level = TextEditingController(),
+      title = TextEditingController();
+  QuestionProvider questionProvider;
+
   Size size;
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     questionProvider = Provider.of<QuestionProvider>(context, listen: true);
-    this.quizzes = questionProvider.quizzes;
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _addDialog(context),
-        child: Center(child: Text('Add')),
-      ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
@@ -82,13 +79,13 @@ class _QuizBuilderState extends State<QuizBuilder> {
                                   Container(
                                     width: size.width * .1,
                                     child: _buildTextFormField(
-                                        controller: title,
+                                        controller: level,
                                         label: 'Difficulty Level'),
                                   ),
                                   Container(
                                     width: size.width * .3,
                                     child: _buildTextFormField(
-                                      controller: description,
+                                      controller: title,
                                       label: 'Title',
                                     ),
                                   ),
@@ -104,7 +101,7 @@ class _QuizBuilderState extends State<QuizBuilder> {
                   SizedBox(
                     height: size.height * .03,
                   ),
-                  buildQuestions(),
+                  QuestionBuilder(),
                 ],
               ),
               Row(
@@ -126,69 +123,35 @@ class _QuizBuilderState extends State<QuizBuilder> {
                               isBold: true, size: FontSizes.small)),
                       onPressed: () {
                         _formKeyQuiz.currentState.validate();
+                        if (title.text != '') {
+                          QuizModel quiz = QuizModel();
+                          quiz.level = level.text;
+                          quiz.title = title.text;
+
+                          DatabaseService()
+                              .addQuizzes(quizModel: quiz)
+                              .then((value) {
+                            showAlertDialog(
+                              context: context,
+                              message: 'Quiz Added',
+                              title: 'Success',
+                            );
+                          });
+                          Future.delayed(Duration(milliseconds: 2500), () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          });
+                        } else {
+                          showAlertDialog(
+                              context: context,
+                              message: 'Please Input a Quiz',
+                              title: 'Error');
+                        }
                       }),
                 ],
               )
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  buildQuestions() {
-    return Container(
-      width: size.width * 0.4,
-      height: size.height * 0.5,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding: EdgeInsets.all(25),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Questions",
-                    style: CustomTextStyles.customText(
-                        isBold: true, size: FontSizes.subHeading),
-                  ),
-                  // MaterialButton(
-                  //   color: Colors.green,
-                  //   child: Text('Add Question',
-                  //       style: TextStyle(
-                  //         color: Colors.white,
-                  //       )),
-                  //   onPressed: () {},
-                  // )
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: 1,
-              itemBuilder: (context, index) {
-                return _buildQuestion(index);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  _buildQuestion(index) {
-    return Card(
-      child: ListTile(
-        title: Text('What is the molecular formula of Propane?'),
-        subtitle: Text('C3H8'),
-        leading: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [Text('1')],
         ),
       ),
     );
@@ -215,120 +178,24 @@ class _QuizBuilderState extends State<QuizBuilder> {
     );
   }
 
-  _addDialog(BuildContext context) {
-    showDialog<String>(
+  showAlertDialog(
+      {@required BuildContext context,
+      @required String title,
+      @required String message}) {
+    // set up the button
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text(title),
+      content: Text(message),
+    );
+
+    // show the dialog
+    showDialog(
       context: context,
-      child: Container(
-        child: AlertDialog(
-          contentPadding: const EdgeInsets.all(16.0),
-          title: Text('Add a question'),
-          content: Container(
-            width: size.width * .6,
-            height: size.height * .4,
-            child: SingleChildScrollView(
-              child: Form(
-                key: _formKeyQuestion,
-                child: Column(
-                  children: <Widget>[
-                    TextFormField(
-                      decoration: InputDecoration(labelText: 'Question'),
-                      onChanged: (String question) {},
-                      validator: (value) {
-                        if (value.length == 0) {
-                          return 'Should not be empty';
-                        }
-                        return null;
-                      },
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          width: size.width * .1,
-                          child: TextFormField(
-                            decoration: InputDecoration(labelText: 'Choice 1'),
-                            validator: (value) {
-                              if (value.length == 0) {
-                                return 'Should not be empty';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        SizedBox(width: size.width * 0.02),
-                        Container(
-                          width: size.width * .1,
-                          child: TextFormField(
-                            decoration: InputDecoration(labelText: 'Choice 2'),
-                            validator: (value) {
-                              if (value.length == 0) {
-                                return 'Should not be empty';
-                              }
-                              return null;
-                            },
-                          ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          width: size.width * .1,
-                          child: TextFormField(
-                            decoration: InputDecoration(labelText: 'Choice 3'),
-                            validator: (value) {
-                              if (value.length == 0) {
-                                return 'Should not be empty';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        SizedBox(width: size.width * 0.02),
-                        Container(
-                          width: size.width * .1,
-                          child: TextFormField(
-                            decoration: InputDecoration(labelText: 'Choice 4'),
-                            validator: (value) {
-                              if (value.length == 0) {
-                                return 'Should not be empty';
-                              }
-                              return null;
-                            },
-                          ),
-                        )
-                      ],
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(labelText: 'Correct Answer'),
-                      onChanged: (String correctAnswer) {},
-                      validator: (value) {
-                        if (value.length == 0) {
-                          return 'Should not be empty';
-                        }
-                        return null;
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          actions: <Widget>[
-            new FlatButton(
-                child: const Text('CANCEL'),
-                onPressed: () {
-                  Navigator.pop(context);
-                }),
-            new FlatButton(
-                child: const Text('ADD'),
-                onPressed: () {
-                  if (_formKeyQuestion.currentState.validate()) {
-                    Navigator.pop(context);
-                  }
-                }),
-          ],
-        ),
-      ),
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }
