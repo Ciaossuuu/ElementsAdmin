@@ -17,13 +17,13 @@ class _QuizBuilderState extends State<QuizBuilder> {
   final GlobalKey<FormState> _formKeyQuiz = GlobalKey<FormState>();
   TextEditingController level = TextEditingController(),
       title = TextEditingController();
-  QuestionProvider questionProvider;
+  QuestionProvider _questionsProvider;
 
   Size size;
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
-    questionProvider = Provider.of<QuestionProvider>(context, listen: true);
+    _questionsProvider = Provider.of<QuestionProvider>(context, listen: true);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -127,6 +127,7 @@ class _QuizBuilderState extends State<QuizBuilder> {
                           QuizModel quiz = QuizModel();
                           quiz.level = level.text;
                           quiz.title = title.text;
+                          quiz.questions = _questionsProvider.questions;
 
                           DatabaseService()
                               .addQuizzes(quizModel: quiz)

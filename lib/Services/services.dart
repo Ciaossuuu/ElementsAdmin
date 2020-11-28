@@ -71,19 +71,9 @@ class DatabaseService {
         .catchError((error) => print("Failed to delete lesson: $error"));
   }
 
-  Future<void> addQuizzes({@required QuizModel quizModel}) async {
-    var map = await QuizModel.toMap(quizModel: quizModel);
-    print(map.runtimeType);
-    return quizzes
-        .add(map)
-        .then((value) => print("Quiz Added"))
-        .catchError((error) => print("Failed to add quiz: $error"));
-  }
-
   //add courses
   Future<void> addCourses({@required CourseModel courseModel}) async {
     var map = await CourseModel.toMap(courseModel: courseModel);
-    print(map.runtimeType);
     return courses.add(map).then((value) async {
       print('course added');
       //update now !
@@ -143,5 +133,34 @@ class DatabaseService {
             .catchError((error) => print("Failed to add course: $error"));
       });
     });
+  }
+
+  Future<void> addQuizzes({@required QuizModel quizModel}) async {
+    var map = await QuizModel.toMap(quizModel: quizModel);
+    return quizzes
+        .add(map)
+        .then((value) async {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .get()
+              .then((value) {
+            value.docs.forEach((user) {
+              addQuizToUser(map: map, uid: user.id);
+            });
+          });
+        })
+        .then((value) => print("Quiz Added"))
+        .catchError((error) => print("Failed to add quiz: $error"));
+  }
+
+  void addQuizToUser({String uid, map, id}) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .collection('quizzes')
+        .doc(id)
+        .set(map)
+        .then((value) => print("User's Quiz Added"))
+        .catchError((error) => print("Failed to add quiz to user: $error"));
   }
 }

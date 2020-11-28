@@ -104,7 +104,6 @@ class _CreateQuestionState extends State<CreateQuestion> {
   }
 
   _addQuestion() {
-    print('form ${_formKeyQuestion.currentState.validate()}');
     QuestionModel question = QuestionModel();
 
     question.question = questionController.text;
