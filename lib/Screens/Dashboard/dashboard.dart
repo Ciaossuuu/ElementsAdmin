@@ -27,7 +27,7 @@ class _DashboardState extends State<Dashboard> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Size size;
-  bool courseHidden = false, quizHidden = false, userHidden = false;
+  bool courseHidden = true, quizHidden = false, userHidden = false;
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;

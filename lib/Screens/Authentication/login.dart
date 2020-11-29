@@ -21,6 +21,9 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController emailController = TextEditingController(),
+      passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -41,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
           Center(
             child: Container(
               width: size.width * .3,
-              height: size.height * .6,
+              height: size.height * .62,
               decoration: BoxDecoration(
                 color: Colors.white,
                 boxShadow: [
@@ -55,90 +58,92 @@ class _LoginPageState extends State<LoginPage> {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Elements++',
-                      style: TextStyle(
-                          fontFamily: 'IndieFlower',
-                          fontSize: 35,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: size.height * .03,
-                    ),
-                    Text(
-                      'Welcome,',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      'Sign in to admin!',
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: size.height * .05),
-                    TextFormField(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Elements++',
+                        style: TextStyle(
+                            fontFamily: 'IndieFlower',
+                            fontSize: 35,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: size.height * .03,
+                      ),
+                      Text(
+                        'Welcome,',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        'Sign in to admin!',
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: size.height * .03),
+                      TextFormField(
+                        controller: emailController,
                         decoration: InputDecoration(
                           contentPadding: const EdgeInsets.all(8.0),
-                          labelText: 'Email',
+                          labelText: 'Username',
                         ),
-                        style: TextStyle(fontSize: 15.0)),
-                    SizedBox(height: size.height * .02),
-                    TextFormField(
-                      obscureText: _isHidden,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.all(8.0),
-                        labelText: 'Password',
-                        suffixIcon: IconButton(
-                            onPressed: _toggleVisibility,
-                            icon: _isHidden
-                                ? Icon(Icons.visibility_off, size: 20)
-                                : Icon(Icons.visibility, size: 20)),
+                        style: TextStyle(fontSize: 15.0),
+                        validator: (val) =>
+                            val.isEmpty ? 'Username is required' : null,
                       ),
-                      style: TextStyle(fontSize: 15.0),
-                      validator: (val) =>
-                          val.isEmpty ? 'Enter your password' : null,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(9.0),
-                      child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Text('Forgot Password?',
-                                style: TextStyle(color: Colors.blue))
-                          ]),
-                    ),
-                    SizedBox(height: size.height * .02),
-                    Center(
-                      child: MaterialButton(
-                        height: size.height * .075,
-                        minWidth: size.width * 0.2,
-                        //color: Color.fromRGBO(86, 43, 167, 1),
-                        splashColor: Colors.purple,
-                        highlightColor: Colors.purple[100],
-                        hoverColor: Colors.purple[50],
-                        shape: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
-                            borderSide: BorderSide(
-                                color: Colors.purple[600], width: 2)),
-                        child: Text(
-                          'SIGN IN',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, letterSpacing: 7),
+                      SizedBox(height: size.height * .02),
+                      TextFormField(
+                        autocorrect: false,
+                        enableSuggestions: false,
+                        controller: passwordController,
+                        obscureText: _isHidden,
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.all(8.0),
+                          labelText: 'Password',
+                          suffixIcon: IconButton(
+                              onPressed: _toggleVisibility,
+                              icon: _isHidden
+                                  ? Icon(Icons.visibility_off, size: 20)
+                                  : Icon(Icons.visibility, size: 20)),
                         ),
-                        onPressed: () {
-                          Navigator.pushReplacementNamed(
-                              context, Routes.courses);
-                        },
+                        style: TextStyle(fontSize: 15.0),
+                        validator: (val) =>
+                            val.isEmpty ? 'Password is required' : null,
                       ),
-                    ),
-                  ],
+                      SizedBox(height: size.height * .06),
+                      Center(
+                        child: MaterialButton(
+                          height: size.height * .075,
+                          minWidth: size.width * 0.2,
+                          //color: Color.fromRGBO(86, 43, 167, 1),
+                          splashColor: Colors.purple,
+                          highlightColor: Colors.purple[100],
+                          hoverColor: Colors.purple[50],
+                          shape: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide: BorderSide(
+                                  color: Colors.purple[600], width: 2)),
+                          child: Text(
+                            'SIGN IN',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, letterSpacing: 7),
+                          ),
+                          onPressed: () {
+                            if (_formKey.currentState.validate()) {
+                              Navigator.pushReplacementNamed(
+                                  context, Routes.dashboard);
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

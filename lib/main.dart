@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
             fontFamily: 'Roboto',
           ),
-          home: Dashboard()),
+          home: LoginPage()),
     );
   }
 }

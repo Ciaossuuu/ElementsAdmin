@@ -38,7 +38,7 @@ class FluroRouter {
 //-----------------------Routenames----------------------------------------//
   static void setupRouter() {
     router.define(Routes.def,
-        handler: _dashboardHandler, transitionType: TransitionType.fadeIn);
+        handler: _signInHandler, transitionType: TransitionType.fadeIn);
     // router.define(Routes.lessons,
     //     handler: _lessonsModule, transitionType: TransitionType.fadeIn);
     router.define(Routes.dashboard,
