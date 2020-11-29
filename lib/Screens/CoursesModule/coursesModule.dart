@@ -41,50 +41,54 @@ class _CourseModuleState extends State<CoursesModule> {
               height: size.height,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 70, 20, 20),
-                child: Column(
-                  children: [
-                    Container(
-                      width: size.width * .7,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Courses',
-                            style: CustomTextStyles.customText(
-                                size: FontSizes.heading, isBold: true),
-                          ),
-                          SizedBox()
-                        ],
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        width: size.width * .7,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Courses',
+                              style: CustomTextStyles.customText(
+                                  size: FontSizes.heading, isBold: true),
+                            ),
+                            SizedBox()
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(height: size.height * 0.05),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Container(
-                          width: size.width * 0.7,
-                          child: StreamBuilder(
-                              stream: FirebaseFirestore.instance
-                                  .collection('courses')
-                                  .snapshots(),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                                if (snapshot.hasData) {
-                                  return SingleChildScrollView(
-                                      child: Scrollbar(
-                                          child: ListView(
-                                              shrinkWrap: true,
-                                              children: snapshot.data.docs
-                                                  .map<Widget>(
-                                                      (doc) => _courseBuilder(
-                                                            doc: doc,
-                                                          ))
-                                                  .toList())));
-                                }
-                                return Center(
-                                    child: CircularProgressIndicator());
-                              })),
-                    ),
-                  ],
+                      SizedBox(height: size.height * 0.05),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Container(
+                            width: size.width * 0.7,
+                            child: StreamBuilder(
+                                stream: FirebaseFirestore.instance
+                                    .collection('courses')
+                                    .snapshots(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Scrollbar(
+                                      child: SingleChildScrollView(
+                                        child: ListView(
+                                            shrinkWrap: true,
+                                            children: snapshot.data.docs
+                                                .map<Widget>(
+                                                    (doc) => _courseBuilder(
+                                                          doc: doc,
+                                                        ))
+                                                .toList()),
+                                      ),
+                                    );
+                                  }
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                })),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

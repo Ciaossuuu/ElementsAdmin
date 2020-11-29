@@ -68,7 +68,7 @@ class _NavigationBarState extends State<NavigationBar> {
                   color: Colors.purple,
                   izSelected: item1,
                   onpressed: () {
-                    Navigator.pushNamed(context, Routes.def);
+                    Navigator.pushNamed(context, Routes.dashboard);
                   }),
               SizedBox(height: size.height * .02),
               _buildButton(
@@ -97,6 +97,40 @@ class _NavigationBarState extends State<NavigationBar> {
                   onpressed: () {
                     Navigator.pushNamed(context, Routes.users);
                   }),
+              SizedBox(height: size.height * .4),
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  width: size.width * 0.08,
+                  child: RaisedButton(
+                    onPressed: () {
+                      Navigator.popAndPushNamed(context, Routes.def);
+                    },
+                    color: Colors.purple,
+                    child: Padding(
+                      padding: EdgeInsets.all(9),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Icon(
+                            Icons.logout,
+                            color: Colors.white,
+                            size: size.width * 0.011,
+                          ),
+                          Text(
+                            'Logout',
+                            style: TextStyle(
+                              fontSize: size.width * 0.01,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           )),
     );

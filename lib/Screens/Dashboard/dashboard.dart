@@ -1,6 +1,7 @@
 import 'package:elementsadmin/Screens/Dashboard/courseGraph/courseGraph.dart';
 import 'package:elementsadmin/Screens/Dashboard/cards/progressCard.dart';
 import 'package:elementsadmin/Screens/Dashboard/quizGraph/quizGraph.dart';
+import 'package:elementsadmin/Screens/Dashboard/courseGraph/usersList.dart';
 import 'package:elementsadmin/Strings/routes.dart';
 import 'package:flutter/material.dart';
 import 'dart:html';
@@ -42,98 +43,102 @@ class _DashboardState extends State<Dashboard> {
               height: size.height,
               child: Padding(
                   padding: const EdgeInsets.all(30),
-                  child: ListView(
-                    children: [
-                      Container(
-                        width: size.width,
-                        height: size.height,
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Container(
+                    width: size.width,
+                    height: size.height,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ProjectProgressCard(
+                                color: Color(0xffFF4C60),
+                                projectName: 'Courses',
+                                value: '2',
+                                icon: Icons.menu_book,
+                                iconColor: Color(0xffFF4C60),
+                                onPressed: () {
+                                  setState(() {
+                                    courseHidden = true;
+                                    quizHidden = false;
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                width: size.width * 0.02,
+                              ),
+                              ProjectProgressCard(
+                                color: Color(0xff6C6CE5),
+                                projectName: 'Quizzes',
+                                value: '3',
+                                icon: Icons.question_answer,
+                                iconColor: Color(0xff6C6CE5),
+                                onPressed: () {
+                                  setState(() {
+                                    courseHidden = false;
+                                    quizHidden = true;
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                width: size.width * 0.02,
+                              ),
+                              ProjectProgressCard(
+                                color: Color(0xffFAAA1E),
+                                projectName: 'Users',
+                                value: '5',
+                                icon: Icons.people,
+                                iconColor: Color(0xffFAAA1E),
+                                onPressed: () {},
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: size.height * 0.1,
+                          ),
+                          Visibility(
+                            visible: courseHidden,
+                            child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ListOfUsers(),
+                                  Card(
+                                    child: Container(
+                                      width: size.width * 0.35,
+                                      height: size.height * 0.35,
+                                      child: CourseChart(),
+                                    ),
+                                  ),
+                                ]),
+                          ),
+                          Visibility(
+                            visible: quizHidden,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                ProjectProgressCard(
-                                  color: Color(0xffFF4C60),
-                                  projectName: 'Courses',
-                                  value: '2',
-                                  icon: Icons.menu_book,
-                                  iconColor: Color(0xffFF4C60),
-                                  onPressed: () {
-                                    setState(() {
-                                      courseHidden = true;
-                                      quizHidden = false;
-                                    });
-                                  },
+                                Container(
+                                  width: size.width * 0.22,
+                                  height: size.height * 0.22,
+                                  child: QuizChart(level: 'Easy'),
                                 ),
-                                SizedBox(
-                                  width: size.width * 0.02,
+                                Container(
+                                  width: size.width * 0.22,
+                                  height: size.height * 0.22,
+                                  child: QuizChart(level: 'Medium'),
                                 ),
-                                ProjectProgressCard(
-                                  color: Color(0xff6C6CE5),
-                                  projectName: 'Quizzes',
-                                  value: '3',
-                                  icon: Icons.question_answer,
-                                  iconColor: Color(0xff6C6CE5),
-                                  onPressed: () {
-                                    setState(() {
-                                      courseHidden = false;
-                                      quizHidden = true;
-                                    });
-                                  },
-                                ),
-                                SizedBox(
-                                  width: size.width * 0.02,
-                                ),
-                                ProjectProgressCard(
-                                  color: Color(0xffFAAA1E),
-                                  projectName: 'Users',
-                                  value: '5',
-                                  icon: Icons.people,
-                                  iconColor: Color(0xffFAAA1E),
-                                  onPressed: () {},
+                                Container(
+                                  width: size.width * 0.22,
+                                  height: size.height * 0.22,
+                                  child: QuizChart(level: 'Hard'),
                                 ),
                               ],
                             ),
-                            SizedBox(
-                              height: size.height * 0.1,
-                            ),
-                            Visibility(
-                              visible: courseHidden,
-                              child: Container(
-                                width: size.width * 0.5,
-                                height: size.height * 0.5,
-                                child: CourseChart(),
-                              ),
-                            ),
-                            Visibility(
-                              visible: quizHidden,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Container(
-                                    width: size.width * 0.22,
-                                    height: size.height * 0.22,
-                                    child: QuizChart(level: 'Easy'),
-                                  ),
-                                  Container(
-                                    width: size.width * 0.22,
-                                    height: size.height * 0.22,
-                                    child: QuizChart(level: 'Medium'),
-                                  ),
-                                  Container(
-                                    width: size.width * 0.22,
-                                    height: size.height * 0.22,
-                                    child: QuizChart(level: 'Hard'),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ))),
         ],
       ),
