@@ -63,7 +63,8 @@ class CourseModel {
       'lessons': lessons,
       'subscribed': false,
       'score': 0,
-      'ref': ref
+      'ref': ref,
+      'izCompleted': false
     };
 
     return course;
