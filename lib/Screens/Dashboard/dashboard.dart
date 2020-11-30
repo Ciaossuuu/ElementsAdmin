@@ -96,22 +96,42 @@ class _DashboardState extends State<Dashboard> {
                             ],
                           ),
                           SizedBox(
-                            height: size.height * 0.1,
+                            height: size.height * 0.08,
                           ),
                           Visibility(
                             visible: courseHidden,
-                            child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ListOfUsers(),
-                                  Card(
-                                    child: Container(
-                                      width: size.width * 0.35,
-                                      height: size.height * 0.35,
-                                      child: CourseChart(),
+                            child: Container(
+                              width: size.width * .8,
+                              height: size.height,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: size.width * 0.03),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    MaterialButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ListOfUsers()),
+                                        );
+                                      },
+                                      color: Colors.greenAccent,
+                                      child: Text('Send Certificate'),
                                     ),
-                                  ),
-                                ]),
+                                    SizedBox(
+                                      height: size.height * 0.03,
+                                    ),
+                                    Card(
+                                      child: Container(
+                                        width: size.width * 0.45,
+                                        height: size.height * 0.45,
+                                        child: CourseChart(),
+                                      ),
+                                    ),
+                                  ]),
+                            ),
                           ),
                           Visibility(
                             visible: quizHidden,
@@ -145,47 +165,7 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  //Lesson Cards
-  Widget _lessonCard({DocumentSnapshot doc}) {
-    // LessonModel lesson = LessonModel.getData(doc: doc);
-    Future getData() async {
-      var database = FirebaseFirestore.instance;
-      QuerySnapshot snapshot = await database.collection('lessons').get();
-      return snapshot.docs;
-    }
-
-    return FutureBuilder(
-      future: getData(),
-      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: SizedBox(
-              height: 210.0,
-              width: 200.0,
-              child: CircularProgressIndicator(),
-            ),
-          );
-        } else {
-          return Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Container(
-                height: size.height * .37,
-                width: size.width * .17,
-                child: GridView.count(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    crossAxisCount: 1,
-                    children: [
-                      Card(
-                          elevation: 2,
-                          child: Container(
-                            padding: EdgeInsets.all(10),
-                            color: Colors.white,
-                          ))
-                    ])),
-          );
-        }
-      },
-    );
+  _lessonCard() {
+    return Container();
   }
 }
