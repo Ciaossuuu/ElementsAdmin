@@ -42,7 +42,8 @@ class CourseModel {
       'courseImageUrl': courseModel.courseImageUrl,
       'lessons': lessons,
       'subscribed': false,
-      'score': 0
+      'score': 0,
+      'izCompleted': false
     };
 
     return course;
