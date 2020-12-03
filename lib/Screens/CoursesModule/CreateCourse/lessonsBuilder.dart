@@ -93,7 +93,7 @@ class _LessonBuilderState extends State<LessonBuilder> {
     return Card(
       child: ListTile(
         title: Text(less.title ?? ''),
-        subtitle: Text(less.description ?? ''),
+        subtitle: Text(less.description ?? '', overflow: TextOverflow.ellipsis),
         leading: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

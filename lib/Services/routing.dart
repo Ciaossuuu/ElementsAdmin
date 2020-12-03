@@ -19,9 +19,6 @@ class FluroRouter {
   static Handler _dashboardHandler = Handler(
       handlerFunc: (BuildContext context, Map<String, dynamic> params) =>
           Dashboard());
-  // static Handler _lessonsModule = Handler(
-  //     handlerFunc: (BuildContext context, Map<String, dynamic> params) =>
-  //         LessonsModule());
   static Handler _challengeModule = Handler(
       handlerFunc: (BuildContext context, Map<String, dynamic> params) =>
           ChallengeModule());

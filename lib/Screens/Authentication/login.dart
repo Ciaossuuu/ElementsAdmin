@@ -38,7 +38,9 @@ class _LoginPageState extends State<LoginPage> {
               decoration: BoxDecoration(
                   color: const Color(0xff7c94b6),
                   image: DecorationImage(
-                      image: AssetImage('background.jpg'), fit: BoxFit.cover)),
+                      image: NetworkImage(
+                          'https://firebasestorage.googleapis.com/v0/b/final-elements.appspot.com/o/background.jpg?alt=media&token=0e4acb08-a593-46b7-9712-c0586f368db7'),
+                      fit: BoxFit.cover)),
             ),
           ),
           Center(
