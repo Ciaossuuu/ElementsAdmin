@@ -1,8 +1,11 @@
 import 'dart:ui';
 
+import 'package:elementsadmin/Provider/currentuser.dart';
+import 'package:elementsadmin/Services/userService.dart';
 import 'package:elementsadmin/Strings/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:elementsadmin/Screens/LessonsModule/lessonsModule.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -27,6 +30,11 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    final _currentUser = Provider.of<CurrentUser>(context);
+    if (_currentUser == null)
+      return Center(
+        child: CircularProgressIndicator(),
+      );
     return Scaffold(
       body: Stack(
         children: [
@@ -46,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
           Center(
             child: Container(
               width: size.width * .3,
-              height: size.height * .62,
+              height: size.height * .65,
               decoration: BoxDecoration(
                 color: Colors.white,
                 boxShadow: [
@@ -87,6 +95,31 @@ class _LoginPageState extends State<LoginPage> {
                             fontSize: 20,
                             color: Colors.grey,
                             fontWeight: FontWeight.bold),
+                      ),
+                      StreamBuilder<Uri>(
+                          stream: UserService()
+                              .downloadUrl(_currentUser.photoUrl)
+                              .asStream(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Center(child: CircularProgressIndicator());
+                            }
+                            return CircleAvatar(
+                              radius: 25,
+                              child: Image.network(
+                                snapshot.data.toString(),
+                                fit: BoxFit.fill,
+                              ),
+                            );
+                          }),
+                      MaterialButton(
+                        onPressed: () {
+                          UserService().uploadToStorage(_currentUser);
+                          print(
+                              UserService().downloadUrl(_currentUser.photoUrl));
+                        },
+                        child: Text('upload'),
                       ),
                       SizedBox(height: size.height * .03),
                       TextFormField(
@@ -138,8 +171,11 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           onPressed: () {
                             if (_formKey.currentState.validate()) {
-                              Navigator.pushReplacementNamed(
-                                  context, Routes.dashboard);
+                              if (emailController.text == 'admin' &&
+                                  passwordController.text == 'admin') {
+                                Navigator.pushReplacementNamed(
+                                    context, Routes.dashboard);
+                              }
                             }
                           },
                         ),

@@ -116,40 +116,10 @@ class _ChallengeModuleState extends State<ChallengeModule> {
             children: [
               Card(
                 child: Container(
-                  child: ExpansionTile(
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(quiz.title),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              SizedBox(width: size.width * 0.01),
-                              MaterialButton(
-                                color: Colors.yellow,
-                                child: Text('Edit'),
-                                onPressed: () {},
-                              ),
-                              SizedBox(width: size.width * 0.01),
-                              MaterialButton(
-                                color: Colors.red,
-                                child: Text('Delete'),
-                                onPressed: () {},
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      children: <Widget>[
-                        ListTile(
-                          title: Column(
-                            children: [
-                              SizedBox(height: size.height * 0.02),
-                              Text(quiz.level),
-                            ],
-                          ),
-                        ),
-                      ]),
+                  child: ListTile(
+                    title: Text(quiz.title),
+                    leading: Text(quiz.level),
+                  ),
                 ),
               )
             ],

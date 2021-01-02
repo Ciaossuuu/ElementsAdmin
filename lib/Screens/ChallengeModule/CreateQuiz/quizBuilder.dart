@@ -140,7 +140,6 @@ class _QuizBuilderState extends State<QuizBuilder> {
                           });
                           Future.delayed(Duration(milliseconds: 2500), () {
                             Navigator.pop(context);
-                            Navigator.pop(context);
                           });
                         } else {
                           showAlertDialog(

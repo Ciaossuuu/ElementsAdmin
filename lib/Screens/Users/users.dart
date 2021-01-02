@@ -3,12 +3,15 @@ import 'dart:html';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elementsadmin/Models/userModel.dart';
 import 'package:custom_switch/custom_switch.dart';
+import 'package:elementsadmin/Provider/currentuser.dart';
+import 'package:elementsadmin/Services/auth.dart';
 import 'package:elementsadmin/Services/services.dart';
 import 'package:elementsadmin/Services/userService.dart';
 import 'package:elementsadmin/Strings/routes.dart';
 import 'package:elementsadmin/Strings/textStyles.dart';
 import 'package:flutter/material.dart';
-
+import 'package:firebase/firebase.dart' as fb;
+import 'package:provider/provider.dart';
 import '../navigationBar.dart';
 
 class Users extends StatefulWidget {
@@ -41,7 +44,6 @@ class _UsersState extends State<Users> {
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
-
     return Scaffold(
       body: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -58,14 +60,13 @@ class _UsersState extends State<Users> {
                     Container(
                       width: size.width * .7,
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             'Users',
                             style: CustomTextStyles.customText(
                                 size: FontSizes.heading, isBold: true),
                           ),
-                          SizedBox()
                         ],
                       ),
                     ),
@@ -121,17 +122,17 @@ class _UsersState extends State<Users> {
                   child: ListTile(
                     title: Text(user.firstName + " " + user.lastName),
                     subtitle: Text(user.email),
-                    trailing: MaterialButton(
-                      onPressed: () => _updateDialog(context, doc),
-                      color: Colors.transparent,
-                      textColor: Colors.yellow[700],
-                      child: Icon(
-                        Icons.edit,
-                        size: 24,
-                      ),
-                      padding: EdgeInsets.all(10),
-                      shape: CircleBorder(),
-                    ),
+                    // trailing: MaterialButton(
+                    //   onPressed: () => _updateDialog(context, doc),
+                    //   color: Colors.transparent,
+                    //   textColor: Colors.yellow[700],
+                    //   child: Icon(
+                    //     Icons.edit,
+                    //     size: 24,
+                    //   ),
+                    //   padding: EdgeInsets.all(10),
+                    //   shape: CircleBorder(),
+                    // ),
                   ),
                 ),
                 SizedBox(

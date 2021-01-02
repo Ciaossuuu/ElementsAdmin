@@ -1,7 +1,9 @@
+import 'package:elementsadmin/Models/userModel.dart';
 import 'package:elementsadmin/Screens/Dashboard/courseGraph/courseGraph.dart';
 import 'package:elementsadmin/Screens/Dashboard/cards/progressCard.dart';
 import 'package:elementsadmin/Screens/Dashboard/quizGraph/quizGraph.dart';
 import 'package:elementsadmin/Screens/Dashboard/courseGraph/usersList.dart';
+import 'package:elementsadmin/Screens/Dashboard/users/users.dart';
 import 'package:elementsadmin/Strings/routes.dart';
 import 'package:flutter/material.dart';
 import 'dart:html';
@@ -16,19 +18,28 @@ import 'package:flutter/material.dart';
 import '../navigationBar.dart';
 
 class Dashboard extends StatefulWidget {
-  Dashboard({Key key}) : super(key: key);
+  final UserModel users;
+  Dashboard({Key key, @required this.users}) : super(key: key);
 
   @override
   _DashboardState createState() => _DashboardState();
 }
 
 class _DashboardState extends State<Dashboard> {
-  CollectionReference users = FirebaseFirestore.instance.collection('lessons');
-
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  Future getDocs() async {
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection("users").get();
+    for (int i = 0; i < querySnapshot.docs.length; i++) {
+      var a = querySnapshot.docs[i];
+      print(a.id);
+    }
+  }
 
   Size size;
   bool courseHidden = true, quizHidden = false, userHidden = false;
+  DocumentSnapshot doc;
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
@@ -63,6 +74,7 @@ class _DashboardState extends State<Dashboard> {
                                   setState(() {
                                     courseHidden = true;
                                     quizHidden = false;
+                                    userHidden = false;
                                   });
                                 },
                               ),
@@ -79,6 +91,7 @@ class _DashboardState extends State<Dashboard> {
                                   setState(() {
                                     courseHidden = false;
                                     quizHidden = true;
+                                    userHidden = false;
                                   });
                                 },
                               ),
@@ -88,10 +101,16 @@ class _DashboardState extends State<Dashboard> {
                               ProjectProgressCard(
                                 color: Color(0xffFAAA1E),
                                 projectName: 'Users',
-                                value: '5',
+                                value: '4',
                                 icon: Icons.people,
                                 iconColor: Color(0xffFAAA1E),
-                                onPressed: () {},
+                                onPressed: () {
+                                  setState(() {
+                                    userHidden = true;
+                                    courseHidden = false;
+                                    quizHidden = false;
+                                  });
+                                },
                               ),
                             ],
                           ),
@@ -156,6 +175,33 @@ class _DashboardState extends State<Dashboard> {
                               ],
                             ),
                           ),
+                          Visibility(
+                            visible: userHidden,
+                            child: Container(
+                              width: size.width * 0.6,
+                              child: StreamBuilder(
+                                stream: FirebaseFirestore.instance
+                                    .collection('users')
+                                    .snapshots(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                                  if (snapshot.hasData) {
+                                    return SingleChildScrollView(
+                                      child: Wrap(
+                                        children: snapshot.data.docs
+                                            .map<Widget>((doc) => _displayUsers(
+                                                  doc: doc,
+                                                ))
+                                            .toList(),
+                                      ),
+                                    );
+                                  }
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                },
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -165,7 +211,30 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  _lessonCard() {
-    return Container();
+  _displayUsers({DocumentSnapshot doc}) {
+    size = MediaQuery.of(context).size;
+    UserModel user = UserModel.get(doc);
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('users').snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center();
+          } else {
+            return Column(
+              children: [
+                Container(
+                  color: Colors.white,
+                  child: ListTile(
+                    title: Text(user.firstName + " " + user.lastName),
+                    subtitle: Text(user.email),
+                  ),
+                ),
+                SizedBox(
+                  height: size.height * 0.02,
+                )
+              ],
+            );
+          }
+        });
   }
 }
